@@ -1461,16 +1461,136 @@ html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:1
 
 {# /* // Min width 1368px */ #}
 
-@media screen and (min-width: 1368px) {
+{# /* // SOLUÇÃO COMPLETA PARA BANNER 100% LARGURA */ #}
 
-	{# /* //// Components */ #}
+{# /* Regras para a seção do slider ocupar 100% da largura em todas as resoluções */ #}
+section[data-store="home-slider"] {
+  /* Remove limitações de largura da seção do slider */
+  width: 100vw !important;
+  /* Compensa as margens laterais do body/container pai */
+  margin-left: calc(-50vw + 50%) !important;
+  margin-right: calc(-50vw + 50%) !important;
+  /* Remove padding lateral que possa limitar a largura */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  /* Garante que ocupe toda a largura disponível */
+  box-sizing: border-box;
+  /* Remove overflow que possa cortar o conteúdo */
+  overflow: visible;
+}
 
-	{# /* Sliders */ #}
+{# /* Regras específicas para o slider dentro da seção */ #}
+.home-slider {
+  /* Remove limitação de largura máxima */
+  max-width: none !important;
+  /* Ocupa 100% da largura do container pai */
+  width: 100% !important;
+  /* Remove margens laterais automáticas que centralizam o elemento */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Mantém apenas a margem superior existente */
+  margin-top: 20px;
+  margin-bottom: 0;
+  /* Remove padding lateral */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
-  .home-slider {
-    max-width: 1170px !important;
-    margin: 20px auto 0 auto;
+{# /* Garante que divs container dentro do slider não limitem a largura */ #}
+section[data-store="home-slider"] .js-home-main-slider-container,
+section[data-store="home-slider"] .js-home-mobile-slider-visibility,
+section[data-store="home-slider"] .js-home-main-slider-visibility {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+{# /* Garante que imagens do slider ocupem toda a largura */ #}
+.home-slider .swiper-slide img {
+  width: 100% !important;
+  max-width: none !important;
+  height: auto;
+  object-fit: cover;
+}
+
+{# /* Ajustes específicos para diferentes resoluções */ #}
+
+{# /* Para telas pequenas (até 767px) - mantém comportamento responsivo */ #}
+@media (max-width: 767px) {
+  section[data-store="home-slider"] {
+    /* Em mobile, usa largura total simples */
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
+}
+
+{# /* Para telas médias (768px até 1199px) */ #}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .home-slider {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+{# /* Para telas grandes (1200px até 1367px) */ #}
+@media (min-width: 1200px) and (max-width: 1367px) {
+  .home-slider {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+{# /* Para telas muito grandes (≥1368px) - PRINCIPAL MODIFICAÇÃO */ #}
+@media screen and (min-width: 1368px) {
+  
+  {# /* //// Components */ #}
+  
+  {# /* Sliders */ #}
+  
+  .home-slider {
+    /* REMOVIDO: max-width: 1170px !important; */
+    /* REMOVIDO: margin: 20px auto 0 auto; */
+    
+    /* NOVA CONFIGURAÇÃO PARA LARGURA TOTAL */
+    width: 100% !important;
+    max-width: none !important;
+    margin: 20px 0 0 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Garante que seção do slider ocupe 100% mesmo em telas grandes */
+  section[data-store="home-slider"] {
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+  }
+}
+
+{# /* Regras para garantir que controles do slider permaneçam visíveis */ #}
+.home-slider .swiper-button-prev,
+.home-slider .swiper-button-next {
+  /* Posiciona controles corretamente mesmo com largura total */
+  z-index: 10;
+}
+
+.home-slider .swiper-pagination {
+  /* Centraliza paginação independente da largura */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+}
+
+{# /* Fallback para casos específicos */ #}
+.full-width-slider {
+  /* Classe auxiliar caso seja necessário aplicar via JavaScript */
+  width: 100vw !important;
+  margin-left: calc(-50vw + 50%) !important;
+  margin-right: calc(-50vw + 50%) !important;
 }
 
 
@@ -1870,6 +1990,212 @@ html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:1
   .notification-close {
   	right: 0;
   }
+}
+
+{# /* =============================================================================
+   ESPAÇAMENTO E BORDAS ARREDONDADAS DOS PRODUTOS
+   Aplica em todas as páginas: home, categoria, busca, relacionados, etc.
+   ============================================================================= */ #}
+
+{# /* Container dos produtos - aumenta espaçamento entre itens */ #}
+.item-container {
+  /* Aumenta padding de 10px para 20px para mais espaçamento */
+  padding: 10px !important;
+}
+
+{# /* Produtos individuais - adiciona bordas arredondadas */ #}
+.item {
+  /* Bordas arredondadas de 15px conforme exemplo da segunda imagem */
+  border-radius: 15px !important;
+  /* Melhora a sombra para combinar com bordas arredondadas */
+  -webkit-box-shadow: 0 4px 8px 0 rgba(50, 50, 50, 0.15) !important;
+  -moz-box-shadow: 0 4px 8px 0 rgba(50, 50, 50, 0.15) !important;
+  box-shadow: 0 4px 8px 0 rgba(50, 50, 50, 0.15) !important;
+  /* Suaviza transições para hover */ 
+  transition: all 0.3s ease !important;
+  /* Garante que conteúdo interno respeite as bordas arredondadas */
+  overflow: hidden !important;
+}
+
+{# /* Efeito hover melhorado para produtos com bordas arredondadas */ #}
+.item:hover {
+  /* Sombra mais pronunciada no hover */
+  -webkit-box-shadow: 0 6px 16px 0 rgba(50, 50, 50, 0.25) !important;
+  -moz-box-shadow: 0 6px 16px 0 rgba(50, 50, 50, 0.25) !important;
+  box-shadow: 0 6px 16px 0 rgba(50, 50, 50, 0.25) !important;
+  /* Leve elevação visual */
+  transform: translateY(-2px) !important;
+}
+
+{# /* Container de imagem do produto - garante bordas arredondadas na imagem */ #}
+.item-image-container,
+.item-image-container-slide {
+  /* Bordas arredondadas superiores para imagens */
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  overflow: hidden !important;
+}
+
+{# /* Imagens dos produtos - ajustes para bordas arredondadas */ #}
+.item-image,
+.item-image-slider {
+  /* Garante que imagens respeitem as bordas arredondadas */
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+}
+
+{# /* Container de informações do produto */ #}
+.item-info-container {
+  /* Remove bordas arredondadas desnecessárias */
+  border-radius: 0 !important;
+  /* Bordas arredondadas inferiores */
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+}
+
+{# /* Produtos reduzidos (carrinho, relacionados) */ #}
+.item-product-reduced {
+  /* Mantém bordas arredondadas mesmo em versões reduzidas */
+  border-radius: 12px !important;
+}
+
+.item-product-reduced .item-image-container {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
+{# /* =============================================================================
+   RESPONSIVIDADE PARA DIFERENTES TAMANHOS DE TELA
+   ============================================================================= */ #}
+
+{# /* Desktop (telas grandes) - 4 colunas */ #}
+@media (min-width: 1200px) {
+  .item-container {
+    width: 25% !important;
+    padding: 10px !important;
+  }
+}
+
+{# /* Desktop médio - 4 colunas */ #}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .item-container {
+    width: 25% !important;
+    padding: 9px !important;
+  }
+}
+
+{# /* Tablet - 3 colunas */ #}
+@media (min-width: 768px) and (max-width: 991px) {
+  .item-container {
+    width: 33.33333333% !important;
+    padding: 7px !important;
+  }
+}
+
+{# /* Mobile - 2 colunas (mantém comportamento atual) */ #}
+@media (max-width: 767px) {
+  .item-container {
+    width: 50% !important;
+    padding: 5px !important;
+  }
+  
+  /* Bordas menores para mobile */
+  .item {
+    border-radius: 12px !important;
+  }
+  
+  .item-image-container,
+  .item-image-container-slide {
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+  }
+  
+  .item-info-container {
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+  }
+}
+
+{# /* =============================================================================
+   AJUSTES ESPECÍFICOS PARA DIFERENTES TIPOS DE GRADE
+   ============================================================================= */ #}
+
+{# /* Produtos em slider (carrossel) */ #}
+.item-container-slide {
+  /* Padding específico para produtos em slider */
+  padding: 15px 10px !important;
+}
+
+.products-slider-item {
+  /* Garante bordas arredondadas em sliders */
+  border-radius: 15px !important;
+  overflow: hidden !important;
+}
+
+{# /* Produtos na home (featured) */ #}
+.js-masonry-grid-item {
+  /* Padding consistente para produtos na home */
+  padding: 10px !important;
+}
+
+{# /* Produtos em resultados de busca */ #}
+.product-grid .item-container {
+  /* Espaçamento específico para página de busca */
+  padding: 10px !important;
+}
+
+{# /* Produtos relacionados */ #}
+.js-related-products .item-container {
+  /* Espaçamento para produtos relacionados */
+  padding: 10px !important;
+}
+
+{# /* =============================================================================
+   MELHORIAS VISUAIS ADICIONAIS
+   ============================================================================= */ #}
+
+{# /* Remove aresta das informações do produto que podem conflitar */ #}
+.item-info:before {
+  /* Remove triângulo decorativo que pode interferir com bordas arredondadas */
+  display: none !important;
+}
+
+{# /* Garante que labels flutuantes respeitem bordas arredondadas */ #}
+.labels-floating {
+  /* Posiciona labels corretamente com bordas arredondadas */
+  top: 8px !important;
+  left: 8px !important;
+}
+
+{# /* Botões e overlays respeitam bordas arredondadas */ #}
+.item-overlay {
+  border-radius: 15px !important;
+}
+
+.item-quickshop-link {
+  /* Garante que links de compra rápida fiquem bem posicionados */
+  border-radius: 8px !important;
+}
+
+{# /* =============================================================================
+   FALLBACKS E COMPATIBILIDADE
+   ============================================================================= */ #}
+
+{# /* Fallback para navegadores mais antigos */ #}
+.item {
+  /* Fallback sem prefixos para navegadores modernos */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(50, 50, 50, 0.15);
+  
+  /* Prefixos para compatibilidade */
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  
+  /* Transição suave */
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 {#/*============================================================================
