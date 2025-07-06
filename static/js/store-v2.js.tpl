@@ -2780,8 +2780,6 @@ DOMContentLoaded.addEventOrExecute(() => {
 
     {% endif %}
 
-});
-
 {% if template == 'home' %}
 
     {# /* // Products slider */ #}
@@ -3019,6 +3017,9 @@ DOMContentLoaded.addEventOrExecute(() => {
     {% endif %}
 
 {% endif %}
+
+});
+
 
 {% if store.live_chat %}
 	

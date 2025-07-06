@@ -1213,7 +1213,7 @@ html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:1
 }
 .item-name{
   margin: 0 0 5px 0;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 18px;
   word-break: break-word;
 }
@@ -1931,7 +1931,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
     border-width: 0 0px 28px 380px;
   }
   .item-name{
-    font-size: 10px;
+    font-size: 12px;
     line-height: inherit;
     letter-spacing: 0px;
   }
@@ -2196,6 +2196,315 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+
+{# /* =============================================================================
+   ALINHAMENTO PERFEITO DA GRADE DE PRODUTOS
+   Resolve o problema de desalinhamento causado pelo Masonry Grid
+   Aplica em todas as páginas e dispositivos de forma responsiva
+   ============================================================================= */ #}
+
+{# /* Desabilita comportamento Masonry e força grid uniforme */ #}
+.js-masonry-grid {
+  /* Remove comportamento masonry padrão */
+  column-count: auto !important;
+  column-gap: 0 !important;
+  /* Usa flexbox para criar grid uniforme */
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  /* Remove margens negativas que podem causar desalinhamento */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+{# /* Grid alternativo para páginas que não usam masonry */ #}
+.grid,
+.product-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+{# /* Containers de produtos com altura uniforme */ #}
+.item-container,
+.js-masonry-grid-item {
+  /* Força altura uniforme para todos os cards */
+  display: flex !important;
+  flex-direction: column !important;
+  /* Altura mínima garante alinhamento mesmo com conteúdo variável */
+  min-height: 420px !important;
+  /* Box-sizing garante que padding não afete cálculos de largura */
+  box-sizing: border-box !important;
+  /* Evita quebras indesejadas */
+  break-inside: avoid !important;
+}
+
+{# /* Card do produto com altura flexível */ #}
+.item {
+  /* Ocupa toda altura disponível do container */
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  /* Garante distribuição uniforme do conteúdo */
+  justify-content: space-between !important;
+}
+
+{# /* Container de imagem com altura fixa */ #}
+.item-image-container {
+  /* Altura fixa para area da imagem garante alinhamento */
+  height: 280px !important;
+  overflow: hidden !important;
+  /* Flexbox para centralizar imagens */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* Mantém bordas arredondadas */
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+}
+
+{# /* Imagens dos produtos sempre centralizadas */ #}
+.item-image {
+  /* Garante que imagem preencha o container adequadamente */
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+{# /* Container de informações com altura flexível */ #}
+.item-info-container {
+  /* Cresce para preencher espaço restante */
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  /* Padding consistente */
+  padding: 5px !important;
+}
+
+{# /* Nome do produto com altura controlada */ #}
+.item-name {
+  /* Altura mínima para nomes curtos */
+  min-height: 40px !important;
+  /* Limita número de linhas para nomes longos */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  /* Alinhamento vertical */
+  margin-bottom: 10px !important;
+  line-height: 1.4 !important;
+}
+
+{# /* Preço sempre na parte inferior */ #}
+.item-price-container {
+  /* Fica sempre no final do card */
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+{# /* =============================================================================
+   RESPONSIVIDADE PARA DIFERENTES DISPOSITIVOS
+   ============================================================================= */ #}
+
+{# /* Desktop Grande (≥1200px) - 4 colunas */ #}
+@media (min-width: 1200px) {
+  .item-container,
+  .js-masonry-grid-item {
+    width: 25% !important;
+    min-height: 450px !important;
+  }
+  
+  .item-image-container {
+    height: 300px !important;
+  }
+}
+
+{# /* Desktop Médio (992px-1199px) - 4 colunas */ #}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .item-container,
+  .js-masonry-grid-item {
+    width: 25% !important;
+    min-height: 420px !important;
+  }
+  
+  .item-image-container {
+    height: 280px !important;
+  }
+}
+
+{# /* Tablet (768px-991px) - 3 colunas */ #}
+@media (min-width: 768px) and (max-width: 991px) {
+  .item-container,
+  .js-masonry-grid-item {
+    width: 33.33333333% !important;
+    min-height: 380px !important;
+  }
+  
+  .item-image-container {
+    height: 240px !important;
+  }
+}
+
+{# /* Mobile (≤767px) - 2 colunas */ #}
+@media (max-width: 767px) {
+  .item-container,
+  .js-masonry-grid-item {
+    width: 50% !important;
+    min-height: 320px !important;
+    padding: 10px !important;
+  }
+  
+  .item-image-container {
+    height: 200px !important;
+  }
+  
+  .item-info-container {
+    padding: 10px !important;
+  }
+  
+  .item-name {
+    min-height: 32px !important;
+    font-size: 14px !important;
+    -webkit-line-clamp: 2 !important;
+  }
+}
+
+{# /* =============================================================================
+   APLICAÇÃO EM DIFERENTES TIPOS DE PÁGINA
+   ============================================================================= */ #}
+
+{# /* Página de Home - produtos destacados */ #}
+.home-featured-products .js-masonry-grid,
+.home-featured-products .grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+{# /* Páginas de categoria */ #}
+.template-category .js-masonry-grid,
+.template-category .product-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+{# /* Página de busca */ #}
+.template-search .js-masonry-grid,
+.template-search .product-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+{# /* Produtos relacionados */ #}
+.js-related-products .grid,
+.related-products .grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+{# /* =============================================================================
+   AJUSTES PARA PRODUTOS EM SLIDER (CARROSSEL)
+   ============================================================================= */ #}
+
+{# /* Produtos em slider mantêm comportamento original */ #}
+.item-container-slide {
+  /* Não aplica altura fixa em sliders */
+  min-height: auto !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+.swiper-wrapper {
+  /* Sliders mantêm comportamento flexível */
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.swiper-slide .item {
+  /* Cards em slider também ficam uniformes */
+  height: 100% !important;
+}
+
+{# /* =============================================================================
+   PRODUTOS REDUZIDOS (CARRINHO, NOTIFICAÇÕES)
+   ============================================================================= */ #}
+
+.item-product-reduced {
+  min-height: 250px !important;
+}
+
+.item-product-reduced .item-image-container {
+  height: 150px !important;
+}
+
+.item-product-reduced .item-info-container {
+  padding: 8px !important;
+}
+
+{# /* =============================================================================
+   MELHORIAS VISUAIS E ACESSIBILIDADE
+   ============================================================================= */ #}
+
+{# /* Garante transições suaves durante redimensionamento */ #}
+.item-container,
+.js-masonry-grid-item {
+  transition: all 0.3s ease !important;
+}
+
+{# /* Melhora loading de imagens */ #}
+.item-image-container {
+  background-color: #f8f8f8 !important;
+}
+
+{# /* Placeholder para quando imagem está carregando */ #}
+.item-image.lazyload:not([src]) {
+  background-color: #f0f0f0 !important;
+  opacity: 0.7 !important;
+}
+
+{# /* =============================================================================
+   DESABILITA JAVASCRIPT MASONRY QUANDO NECESSÁRIO
+   ============================================================================= */ #}
+
+{# /* Classe para forçar grid CSS ao invés de Masonry JS */ #}
+.force-css-grid .js-masonry-grid {
+  /* Importantes para sobrescrever qualquer JS */ #}
+  display: flex !important;
+  flex-wrap: wrap !important;
+  column-count: auto !important;
+  height: auto !important;
+}
+
+{# /* =============================================================================
+   FALLBACKS E COMPATIBILIDADE
+   ============================================================================= */ #}
+
+{# /* Fallback para navegadores sem suporte a flexbox */ #}
+@supports not (display: flex) {
+  .js-masonry-grid {
+    display: block !important;
+  }
+  
+  .item-container,
+  .js-masonry-grid-item {
+    display: inline-block !important;
+    vertical-align: top !important;
+  }
+}
+
+{# /* Garante que o layout seja recalculado após carregamento */ #}
+.visible-when-content-ready .js-masonry-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
 }
 
 /* =============================================================================
@@ -2570,18 +2879,6 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
-/* =============================================================================
-   FIM DA CORREÇÃO VISUAL DEFINITIVA
-   
-   PROBLEMAS RESOLVIDOS:
-   ✓ Carrossel centralizado corretamente
-   ✓ Setas posicionadas dentro da área visível
-   ✓ Faixa branca removida completamente
-   ✓ Layout alinhado e profissional
-   ✓ 4 produtos no desktop, 2 no mobile
-   ✓ Design responsivo otimizado
-   ============================================================================= */
 
 {#/*============================================================================
   #Utilities classes

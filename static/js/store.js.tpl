@@ -787,7 +787,6 @@ LS.ready.then(function() {
                     };
 
                 {% endif %}
-
                 // ===========================================================================
                 // CORREÇÃO DEFINITIVA DO CARROSSEL DE PROMOÇÕES - AKITUTES
                 // SUBSTITUI TODAS AS IMPLEMENTAÇÕES ANTERIORES
