@@ -2198,19 +2198,19 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   transition: all 0.3s ease;
 }
 
-/* ===========================================================================
-   CORREÇÃO DEFINITIVA CSS - CARROSSEL AKITUTES
-   SUBSTITUI TODAS AS IMPLEMENTAÇÕES ANTERIORES
-   =========================================================================== */
+/* =============================================================================
+   CORREÇÃO DEFINITIVA CARROSSEL AKITUTES - 4 PRODUTOS EXATOS
+   SUBSTITUI TODOS OS CÓDIGOS ANTERIORES
+   ============================================================================= */
 
-/* Reset completo da seção */
+/* Reset seção de promoções */
 [data-store="home-products-sale"] {
   margin: 40px 0 !important;
   padding: 0 15px !important;
   overflow: visible !important;
 }
 
-/* Anula comportamento de grid masonry */
+/* Remove comportamento de grid/masonry */
 [data-store="home-products-sale"] .js-masonry-grid,
 [data-store="home-products-sale"] .grid,
 [data-store="home-products-sale"] .product-grid {
@@ -2219,10 +2219,9 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   align-items: normal !important;
   column-count: auto !important;
   column-gap: 0 !important;
-  column-fill: auto !important;
 }
 
-/* Container principal do Swiper */
+/* Container principal do carrossel */
 .js-swiper-sale-products {
   display: block !important;
   overflow: hidden !important;
@@ -2240,12 +2239,10 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   height: auto !important;
   align-items: normal !important;
   transition-property: transform !important;
-  transition-timing-function: ease !important;
   transition-duration: 300ms !important;
   margin: 0 !important;
   padding: 0 !important;
   position: relative !important;
-  box-sizing: border-box !important;
 }
 
 /* Slides individuais */
@@ -2254,28 +2251,48 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   height: auto !important;
-  width: auto !important;
   position: relative !important;
   box-sizing: border-box !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* RESPONSIVIDADE CRÍTICA */
+/* CONFIGURAÇÃO CRÍTICA DE LARGURA DOS SLIDES */
 
-/* Mobile (até 767px) - 2 produtos */
+/* Mobile (até 767px) - 2 produtos EXATOS */
 @media (max-width: 767px) {
   .js-swiper-sale-products .swiper-slide {
-    width: 50% !important;
-    flex: 0 0 50% !important;
+    width: calc(50% - 5px) !important;
+    flex: 0 0 calc(50% - 5px) !important;
+    margin-right: 10px !important;
+  }
+  
+  .js-swiper-sale-products .swiper-slide:nth-child(2n) {
+    margin-right: 0 !important;
   }
 }
 
-/* Desktop (768px+) - 4 produtos */
+/* Desktop (768px+) - 4 produtos EXATOS SEM CORTES */
 @media (min-width: 768px) {
   .js-swiper-sale-products .swiper-slide {
     width: 25% !important;
     flex: 0 0 25% !important;
+    margin-right: 0 !important;
+    padding: 0 5px !important;
+  }
+  
+  /* Força container para mostrar exatamente 4 produtos */
+  .js-swiper-sale-products .swiper-wrapper {
+    justify-content: flex-start !important;
+  }
+  
+  /* Remove qualquer margin que possa causar cortes */
+  .js-swiper-sale-products .swiper-slide:first-child {
+    padding-left: 0 !important;
+  }
+  
+  .js-swiper-sale-products .swiper-slide:last-child {
+    padding-right: 0 !important;
   }
 }
 
@@ -2284,7 +2301,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
 .js-swiper-sale-products .js-masonry-grid-item {
   display: block !important;
   width: 100% !important;
-  padding: 10px !important;
+  padding: 8px !important;
   box-sizing: border-box !important;
   margin: 0 !important;
 }
@@ -2303,7 +2320,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   background: #fff !important;
 }
 
-/* Hover nos produtos */
+/* Hover effect */
 .js-swiper-sale-products .item:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
@@ -2322,23 +2339,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   border-top-right-radius: 15px !important;
 }
 
-/* Ajustes para diferentes tamanhos de tela */
-@media (max-width: 480px) {
-  .js-swiper-sale-products .item-container {
-    padding: 8px !important;
-  }
-  
-  .js-swiper-sale-products .item {
-    min-height: 300px !important;
-  }
-  
-  .js-swiper-sale-products .item-image-container {
-    height: 180px !important;
-    max-height: 180px !important;
-    min-height: 180px !important;
-  }
-}
-
+/* Ajustes para desktop */
 @media (min-width: 768px) {
   .js-swiper-sale-products .item {
     min-height: 380px !important;
@@ -2349,11 +2350,26 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
     max-height: 240px !important;
     min-height: 240px !important;
   }
+  
+  .js-swiper-sale-products .item-container {
+    padding: 10px !important;
+  }
 }
 
-@media (min-width: 1200px) {
+/* Ajustes para mobile pequeno */
+@media (max-width: 480px) {
+  .js-swiper-sale-products .item {
+    min-height: 300px !important;
+  }
+  
+  .js-swiper-sale-products .item-image-container {
+    height: 180px !important;
+    max-height: 180px !important;
+    min-height: 180px !important;
+  }
+  
   .js-swiper-sale-products .item-container {
-    padding: 12px !important;
+    padding: 6px !important;
   }
 }
 
@@ -2432,7 +2448,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   transform: scale(1.2) !important;
 }
 
-/* Remove todas as interferências */
+/* Remove interferências */
 [data-store="home-products-sale"] .item-container,
 [data-store="home-products-sale"] .js-masonry-grid-item {
   min-height: auto !important;
@@ -2441,7 +2457,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   break-inside: auto !important;
 }
 
-/* Força comportamento correto do Swiper */
+/* Força comportamento do Swiper */
 .js-swiper-sale-products.swiper-container,
 .js-swiper-sale-products.swiper-container-initialized {
   display: block !important;
@@ -2455,7 +2471,22 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   opacity: 1 !important;
 }
 
-/* Compatibilidade */
+/* FORÇA EXATAMENTE 4 PRODUTOS NO DESKTOP - OVERRIDE FINAL */
+@media (min-width: 768px) {
+  .js-swiper-sale-products[data-slides-per-view="4"] .swiper-slide {
+    width: 25% !important;
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    margin: 0 !important;
+    padding: 0 5px !important;
+  }
+  
+  .js-swiper-sale-products[data-slides-per-view="4"] .swiper-wrapper {
+    width: 100% !important;
+  }
+}
+
+/* Compatibilidade navegadores antigos */
 .js-swiper-sale-products .item {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -2464,9 +2495,15 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   -o-transition: all 0.3s ease;
 }
 
-/* ===========================================================================
-   FIM DA CORREÇÃO CSS DEFINITIVA
-   =========================================================================== */
+/* =============================================================================
+   FIM DA CORREÇÃO DEFINITIVA
+   FUNCIONALIDADES:
+   ✓ Mobile: 2 produtos exatos
+   ✓ Desktop: 4 produtos exatos sem cortes
+   ✓ Navegação funcional
+   ✓ Paginação responsiva
+   ✓ Design otimizado
+   ============================================================================= */
 
 {#/*============================================================================
   #Utilities classes

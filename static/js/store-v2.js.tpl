@@ -2782,322 +2782,243 @@ DOMContentLoaded.addEventOrExecute(() => {
 
 });
 
-// ===========================================================================
-// CORREÇÃO DEFINITIVA DO CARROSSEL DE PROMOÇÕES - AKITUTES
-// SUBSTITUI TODAS AS IMPLEMENTAÇÕES ANTERIORES
-// ===========================================================================
+{% if template == 'home' %}
 
-(function() {
-    'use strict';
-    
-    // Remove qualquer implementação anterior conflitante
-    function removeConflictingCarousels() {
-        const existingCarousels = document.querySelectorAll('.js-swiper-sale-products');
-        existingCarousels.forEach(function(container) {
-            if (container.swiper) {
-                try {
-                    container.swiper.destroy(true, true);
-                    console.log('Carrossel anterior removido');
-                } catch (e) {
-                    console.log('Erro ao remover carrossel anterior:', e);
+    {# /* // Products slider */ #}
+
+    {% if sections.sale.products %}
+        {% if settings.product_color_variants or settings.quick_view %}
+
+            {# Duplicate cloned slide elements for quickshop or colors forms #}
+
+            updateClonedItemsIDs = function(element){
+                jQueryNuvem(element).each(function(el) {
+                    var $this = jQueryNuvem(el);
+                    var slide_index = $this.attr("data-swiper-slide-index");
+                    var clone_quick_id = $this.find(".js-quickshop-container").attr("data-quickshop-id");
+                    var clone_product_id = $this.attr("data-product-id");
+                    $this.attr("data-product-id" , clone_product_id + "-clone-" + slide_index);
+                    $this.find(".js-quickshop-container").attr("data-quickshop-id" , clone_quick_id + "-clone-" + slide_index);
+                });
+            };
+
+        {% endif %}
+        
+        // CONFIGURAÇÃO DEFINITIVA E CORRIGIDA DO CARROSSEL
+        createSwiper('.js-swiper-sale-products', {
+            lazy: true,
+            {% if sections.sale.products | length > 4 %}
+            loop: true,
+            {% endif %}
+            watchOverflow: true,
+            centerInsufficientSlides: true,
+            watchSlidesVisibility: true,
+            slideVisibleClass: 'js-swiper-slide-visible',
+            threshold: 5,
+            
+            // CONFIGURAÇÃO MOBILE PADRÃO
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 10,
+            
+            pagination: {
+                el: '.js-swiper-sale-products-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.js-swiper-sale-products-next',
+                prevEl: '.js-swiper-sale-products-prev',
+            },
+            
+            // BREAKPOINTS DEFINITIVOS - SOLUÇÃO PARA 4 PRODUTOS EXATOS
+            breakpoints: {
+                // Mobile pequeno
+                320: {
+                    slidesPerView: 2,
+                    slidesPerGroup: 2,
+                    spaceBetween: 8
+                },
+                // Mobile
+                480: {
+                    slidesPerView: 2,
+                    slidesPerGroup: 2,
+                    spaceBetween: 10
+                },
+                // Tablet
+                640: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 3,
+                    spaceBetween: 10
+                },
+                // DESKTOP - 4 PRODUTOS EXATOS (SOLUÇÃO DEFINITIVA)
+                768: {
+                    slidesPerView: 4,
+                    slidesPerGroup: 4,
+                    spaceBetween: 0,
+                    width: null,
+                    watchSlidesProgress: true
+                },
+                // Desktop médio
+                1024: {
+                    slidesPerView: 4,
+                    slidesPerGroup: 4,
+                    spaceBetween: 0
+                },
+                // Desktop grande
+                1200: {
+                    slidesPerView: 4,
+                    slidesPerGroup: 4,
+                    spaceBetween: 0
+                }
+            },
+            
+            // EVENTOS PARA GARANTIR 4 PRODUTOS EXATOS
+            on: {
+                init: function() {
+                    console.log('Carrossel de promocoes inicializado');
+                    console.log('Slides visiveis: ' + this.slidesPerViewDynamic());
+                    console.log('Total produtos: ' + this.slides.length);
+                    
+                    // Força exactly 4 produtos no desktop
+                    if (window.innerWidth >= 768) {
+                        this.params.slidesPerView = 4;
+                        this.params.slidesPerGroup = 4;
+                        this.params.spaceBetween = 0;
+                    }
+                    
+                    // Update forçado
+                    setTimeout(() => {
+                        this.update();
+                        this.updateSlidesClasses();
+                    }, 100);
+                },
+                
+                resize: function() {
+                    console.log('Redimensionando carrossel');
+                    
+                    // Força configuração correta baseada na tela
+                    if (window.innerWidth >= 768) {
+                        this.params.slidesPerView = 4;
+                        this.params.slidesPerGroup = 4;
+                        this.params.spaceBetween = 0;
+                        console.log('Desktop: forcando 4 produtos');
+                    } else {
+                        this.params.slidesPerView = 2;
+                        this.params.slidesPerGroup = 2;
+                        this.params.spaceBetween = 10;
+                        console.log('Mobile: forcando 2 produtos');
+                    }
+                    
+                    this.update();
+                    console.log('Slides visiveis apos resize: ' + this.slidesPerViewDynamic());
+                },
+                
+                breakpoint: function() {
+                    console.log('Breakpoint alterado');
+                    console.log('Slides visiveis: ' + this.slidesPerViewDynamic());
+                    
+                    // Força update após breakpoint
+                    setTimeout(() => {
+                        this.update();
+                        this.updateSlidesClasses();
+                    }, 50);
                 }
             }
         });
-    }
-    
-    // Configuração definitiva do carrossel
-    function initializeCorrectCarousel() {
         
-        // Aguarda carregamento completo
-        setTimeout(function() {
-            
-            const container = document.querySelector('.js-swiper-sale-products');
-            
-            if (!container) {
-                console.log('Container de promoções não encontrado');
-                return;
-            }
-            
-            // Remove instâncias conflitantes
-            removeConflictingCarousels();
-            
-            // Verifica se Swiper está disponível
-            if (typeof Swiper === 'undefined') {
-                console.log('Biblioteca Swiper não encontrada, aguardando...');
-                setTimeout(initializeCorrectCarousel, 1000);
-                return;
-            }
-            
-            // Limpa estrutura
-            container.classList.remove('swiper-container-initialized');
-            container.classList.add('swiper-container');
-            
-            const wrapper = container.querySelector('.swiper-wrapper');
-            const slides = container.querySelectorAll('.swiper-slide');
-            
-            if (!wrapper || slides.length === 0) {
-                console.log('Estrutura HTML inválida para carrossel');
-                return;
-            }
-            
-            // Remove estilos inline conflitantes
-            wrapper.removeAttribute('style');
-            slides.forEach(function(slide) {
-                slide.removeAttribute('style');
-                slide.classList.add('swiper-slide');
-            });
-            
-            console.log('Inicializando carrossel corrigido com ' + slides.length + ' produtos');
-            
-            // CONFIGURAÇÃO CORRETA E DEFINITIVA
-            try {
-                const swiperInstance = new Swiper(container, {
-                    // Configurações base
-                    direction: 'horizontal',
-                    lazy: true,
-                    loop: slides.length > 4,
-                    watchOverflow: true,
-                    centerInsufficientSlides: true,
-                    watchSlidesVisibility: true,
-                    slideVisibleClass: 'js-swiper-slide-visible',
-                    
-                    // Configuração de slides - MOBILE DEFAULT
-                    slidesPerView: 2,
-                    slidesPerGroup: 2,
-                    spaceBetween: 15,
-                    
-                    // Performance
-                    speed: 300,
-                    threshold: 5,
-                    shortSwipes: true,
-                    longSwipes: true,
-                    allowTouchMove: true,
-                    simulateTouch: true,
-                    grabCursor: true,
-                    
-                    // Observer para mudanças no DOM
-                    observer: true,
-                    observeParents: true,
-                    observeSlideChildren: true,
-                    
-                    // Navegação
-                    navigation: {
-                        nextEl: '.js-swiper-sale-products-next',
-                        prevEl: '.js-swiper-sale-products-prev',
-                        disabledClass: 'swiper-button-disabled',
-                    },
-                    
-                    // Paginação
-                    pagination: {
-                        el: '.js-swiper-sale-products-pagination',
-                        clickable: true,
-                        dynamicBullets: false,
-                        renderBullet: function(index, className) {
-                            return '<span class="' + className + '" aria-label="Slide ' + (index + 1) + '"></span>';
-                        },
-                    },
-                    
-                    // BREAKPOINTS RESPONSIVOS - SOLUÇÃO DEFINITIVA
-                    breakpoints: {
-                        // Mobile extra pequeno
-                        320: {
-                            slidesPerView: 2,
-                            slidesPerGroup: 2,
-                            spaceBetween: 10
-                        },
-                        // Mobile
-                        480: {
-                            slidesPerView: 2,
-                            slidesPerGroup: 2,
-                            spaceBetween: 12
-                        },
-                        // Tablet pequeno (transição)
-                        640: {
-                            slidesPerView: 3,
-                            slidesPerGroup: 3,
-                            spaceBetween: 12
-                        },
-                        // DESKTOP - 4 PRODUTOS (OBJETIVO PRINCIPAL)
-                        768: {
-                            slidesPerView: 4,
-                            slidesPerGroup: 4,
-                            spaceBetween: 15
-                        },
-                        // Desktop médio
-                        1024: {
-                            slidesPerView: 4,
-                            slidesPerGroup: 4,
-                            spaceBetween: 20
-                        },
-                        // Desktop grande
-                        1200: {
-                            slidesPerView: 4,
-                            slidesPerGroup: 4,
-                            spaceBetween: 25
-                        }
-                    },
-                    
-                    // EVENTOS PARA GARANTIR FUNCIONAMENTO
-                    on: {
-                        init: function() {
-                            console.log('CARROSSEL AKITUTES CORRIGIDO INICIALIZADO');
-                            console.log('Dispositivo: ' + (window.innerWidth >= 768 ? 'Desktop (4 produtos)' : 'Mobile (2 produtos)'));
-                            console.log('Slides visíveis: ' + this.slidesPerViewDynamic());
-                            console.log('Total de produtos: ' + this.slides.length);
-                            
-                            // Força atualização inicial
-                            setTimeout(() => {
-                                this.update();
-                                this.updateSlidesClasses();
-                                this.updateProgress();
-                            }, 100);
-                            
-                            // Marca como inicializado corretamente
-                            container.setAttribute('data-carousel-fixed', 'true');
-                        },
-                        
-                        afterInit: function() {
-                            console.log('Carrossel completamente configurado');
-                            this.updateSize();
-                            this.updateSlides();
-                            this.updateProgress();
-                            this.updateSlidesClasses();
-                        },
-                        
-                        resize: function() {
-                            const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
-                            const expected = window.innerWidth >= 768 ? 4 : 2;
-                            console.log('Redimensionando: ' + device + ' (' + expected + ' produtos esperados)');
-                            console.log('Slides visíveis atual: ' + this.slidesPerViewDynamic());
-                            this.update();
-                        },
-                        
-                        slideChange: function() {
-                            this.updateSlidesClasses();
-                        },
-                        
-                        breakpoint: function(swiper, breakpointParams) {
-                            const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
-                            console.log('Breakpoint ativo: ' + device);
-                            console.log('Slides visíveis: ' + this.slidesPerViewDynamic());
-                            
-                            // Força update após mudança de breakpoint
-                            setTimeout(() => {
-                                this.update();
-                                this.updateSlidesClasses();
-                                this.updateProgress();
-                            }, 150);
-                        },
-                        
-                        observerUpdate: function() {
-                            this.update();
-                        }
-                    }
-                });
-                
-                // Armazena referência global
-                window.akitutesCarousel = swiperInstance;
-                
-                // Update final após criação
-                setTimeout(function() {
-                    swiperInstance.update();
-                    swiperInstance.updateSize();
-                    swiperInstance.updateSlidesClasses();
-                    swiperInstance.updateProgress();
-                    
-                    // Carrega imagens lazy se existirem
-                    const lazyImages = container.querySelectorAll('img[data-src]');
-                    if (lazyImages.length > 0) {
-                        console.log('Carregando ' + lazyImages.length + ' imagens lazy');
-                        lazyImages.forEach(function(img) {
-                            if (img.dataset.src) {
-                                img.src = img.dataset.src;
-                                img.removeAttribute('data-src');
-                            }
-                        });
-                    }
-                    
-                    console.log('CARROSSEL AKITUTES FUNCIONANDO PERFEITAMENTE!');
-                    
-                }, 300);
-                
-            } catch (error) {
-                console.error('Erro ao criar carrossel:', error);
-                
-                // Tentativa de recuperação
-                setTimeout(function() {
-                    console.log('Tentando recuperar carrossel...');
-                    initializeCorrectCarousel();
-                }, 2000);
-            }
-            
-        }, 1500); // Aguarda carregamento completo
-    }
-    
-    // Função para verificar status
-    function checkCarouselStatus() {
-        const container = document.querySelector('.js-swiper-sale-products');
-        
-        if (container && container.swiper && container.getAttribute('data-carousel-fixed') === 'true') {
-            const swiper = container.swiper;
-            const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
-            const expected = window.innerWidth >= 768 ? 4 : 2;
-            const actual = swiper.slidesPerViewDynamic();
-            
-            console.log('=== STATUS DO CARROSSEL AKITUTES ===');
-            console.log('Dispositivo: ' + device);
-            console.log('Produtos esperados: ' + expected);
-            console.log('Produtos visíveis: ' + actual);
-            console.log('Status: ' + (actual === expected ? 'CORRETO' : 'INCORRETO'));
-            console.log('Total de produtos: ' + swiper.slides.length);
-            console.log('Slide ativo: ' + (swiper.activeIndex + 1));
-            console.log('===================================');
-            
-            return swiper;
-        } else {
-            console.log('Carrossel não encontrado ou não corrigido');
-            return null;
-        }
-    }
-    
-    // Função para forçar correção
-    function forceCarouselFix() {
-        console.log('Forçando correção do carrossel...');
-        removeConflictingCarousels();
-        initializeCorrectCarousel();
-    }
-    
-    // Disponibiliza funções globalmente
-    window.checkAkitutesCarousel = checkCarouselStatus;
-    window.fixAkitutesCarousel = forceCarouselFix;
-    
-    // INICIALIZAÇÃO AUTOMÁTICA
-    
-    // Aguarda DOM carregar
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeCorrectCarousel);
-    } else {
-        initializeCorrectCarousel();
-    }
-    
-    // Reinicializa em mudanças de orientação
-    window.addEventListener('orientationchange', function() {
-        setTimeout(function() {
-            if (window.akitutesCarousel) {
-                window.akitutesCarousel.update();
-                checkCarouselStatus();
-            }
-        }, 500);
-    });
-    
-    console.log('Sistema de correção do carrossel akitutes carregado');
-    console.log('Funções disponíveis: checkAkitutesCarousel(), fixAkitutesCarousel()');
-    
-})();
+        {% if settings.product_color_variants or settings.quick_view %}
 
-// ===========================================================================
-// FIM DA CORREÇÃO DEFINITIVA
-// ===========================================================================
+            {# Clone swiper slides #}
+
+            jQueryNuvem(document).on('mouseenter', '.js-swiper-sale-products', function() {
+                updateClonedItemsIDs('.js-swiper-sale-products .swiper-slide-duplicate .js-item-product');
+            });
+
+            {% if settings.product_color_variants %}
+                jQueryNuvem(document).on("change", ".js-variation-option", function(e) {
+                    var $this = jQueryNuvem(this);
+                    var $variants_container = $this.closest(".js-quickshop-container");
+                    var $quickshop_variant_modal = jQueryNuvem(".js-quickshop-container");
+                    var $variant_container_to_use = $variants_container;
+                    
+                    if(jQueryNuvem("#quickshop-modal").hasClass("js-quickshop-opened")){
+                        var $variant_container_to_use = $quickshop_variant_modal;
+                    }
+                    LS.changeVariant($variant_container_to_use, jQueryNuvem(this).val(), function(variant){
+
+                        $variant_container_to_use.attr("data-quickshop-selected-variant", variant.id);
+                        
+                        var variant_color_image_option = $variant_container_to_use.find('#' + variant.id + '_color-text').attr('data-image');
+                        
+                        $variant_container_to_use.find('.js-item-product').attr("data-product-image", variant_color_image_option);
+
+                        var $item_to_update_image = jQueryNuvem('.js-item-product[data-product-id^="'+variant.product_id+'"].js-swiper-slide-visible');
+                        var $item_to_update_image_cloned = jQueryNuvem('.js-item-product[data-product-id^="'+variant.product_id+'"].js-swiper-slide-visible.swiper-slide-duplicate');
+
+                        if($item_to_update_image.hasClass("swiper-slide-duplicate")){
+                            var slide_item_index = $item_to_update_image_cloned.attr("data-swiper-slide-index");
+                            var current_image = jQueryNuvem('.js-item-image', '.js-item-product[data-product-id="'+variant.product_id+'-clone-'+slide_item_index+'" ]');
+                        }else{
+                            var slide_item_index = $item_to_update_image.attr("data-swiper-slide-index");
+                            var current_image = jQueryNuvem('.js-item-image', '.js-item-product[data-product-id="'+variant.product_id+'"]');
+                        }
+                        current_image.attr('srcset', variant.image_url);
+                        {% if settings.product_hover %}
+                            current_image.closest(".js-item-with-secondary-image").removeClass("item-with-two-images");
+                        {% endif %}
+                    });
+                });
+
+                jQueryNuvem(document).on("click", ".js-quickshop-modal-open", function (e) {
+                    e.preventDefault();
+                    var $this = jQueryNuvem(this);
+                    if($this.hasClass("js-quickshop-slide")){
+                        jQueryNuvem("#quickshop-modal .js-item-product").addClass("js-swiper-slide-visible js-item-slide");
+                    }
+                    LS.fillQuickshop($this);
+
+                    if (jQueryNuvem(window).width() < 768) {
+                        var product_image_dimension = jQueryNuvem(this).closest('.js-item-product').find('.js-item-image-container').attr("style");
+                        jQueryNuvem("#quickshop-modal .js-quickshop-img-padding").attr("style", product_image_dimension);
+                    }
+
+                });
+
+            {% endif %}
+
+            {% if settings.quick_view %}
+                restoreQuickshopForm = function(){
+
+                    jQueryNuvem("#quickshop-modal .js-item-product").removeClass("js-swiper-slide-visible js-item-slide");
+                    jQueryNuvem("#quickshop-modal .js-quickshop-container").attr( { 'data-variants' : '' , 'data-quickshop-id': '' } );
+                    jQueryNuvem("#quickshop-modal .js-item-product").attr('data-product-id', '');
+
+                    jQueryNuvem(".js-quickshop-form .js-product-slide-img").attr('srcset', '');
+                    jQueryNuvem(".js-quickshop-form .js-quickshop-name").html('');
+                    jQueryNuvem(".js-quickshop-form .js-quickshop-price").html('');
+                    jQueryNuvem(".js-quickshop-form .js-quickshop-submit").attr('value', '');
+                    jQueryNuvem(".js-quickshop-form .js-quickshop-quantity").val('1');
+                    jQueryNuvem(".js-quickshop-form .js-quickshop-form-variant").remove();
+                    jQueryNuvem(".js-quickshop-form").trigger("reset");
+
+                    jQueryNuvem(".js-quickshop-form .js-quickshop-submit").removeAttr('disabled').removeClass('disabled');
+
+                    jQueryNuvem("#quickshop-modal .js-fulfillment-info").hide();
+                    jQueryNuvem("#quickshop-modal .js-shipping-calculator-container").hide();
+
+                };
+
+                jQueryNuvem(document).on("click", ".js-quickshop-close", function (e) {
+                    restoreQuickshopForm();
+                });
+
+            {% endif %}
+
+        {% endif %}
+
+    {% endif %}
+
+{% endif %}
 
 {% if store.live_chat %}
 	
