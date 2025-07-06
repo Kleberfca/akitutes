@@ -2780,6 +2780,8 @@ DOMContentLoaded.addEventOrExecute(() => {
 
     {% endif %}
 
+});
+
 // =============================================================================
 // CORREÇÃO DEFINITIVA DO CARROSSEL DE PROMOÇÕES - AKITUTES
 //

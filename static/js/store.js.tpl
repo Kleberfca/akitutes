@@ -787,6 +787,24 @@ LS.ready.then(function() {
                     };
 
                 {% endif %}
+{% if sections.sale.products %}
+    {% if settings.product_color_variants or settings.quick_view %}
+
+        {# Duplicate cloned slide elements for quickshop or colors forms #}
+
+        updateClonedItemsIDs = function(element){
+            $(element).each(function() {
+                var $this = $(this);
+                var slide_index = $this.attr("data-swiper-slide-index");
+                var clone_quick_id = $this.find(".js-quickshop-container").attr("data-quickshop-id");
+                var clone_product_id = $this.attr("data-product-id");
+                $this.attr("data-product-id" , clone_product_id + "-clone-" + slide_index);
+                $this.find(".js-quickshop-container").attr("data-quickshop-id" , clone_quick_id + "-clone-" + slide_index);
+            });
+        };
+
+    {% endif %}
+    
                 createSwiper('.js-swiper-sale-products', {
                     lazy: true,
                     {% if sections.sale.products | length > 4 %}
@@ -799,6 +817,8 @@ LS.ready.then(function() {
                     threshold: 5,
                     slidesPerView: 2,
                     slidesPerGroup: 2,
+                    spaceBetween: 15,
+                    
                     pagination: {
                         el: '.js-swiper-sale-products-pagination',
                         clickable: true,
@@ -807,20 +827,200 @@ LS.ready.then(function() {
                         nextEl: '.js-swiper-sale-products-next',
                         prevEl: '.js-swiper-sale-products-prev',
                     },
+                    
+                    // BREAKPOINTS PARA RESPONSIVIDADE
                     breakpoints: {
+                        // Mobile pequeno
+                        320: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 10
+                        },
+                        // Mobile
+                        480: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 12
+                        },
+                        // Tablet
+                        640: {
+                            slidesPerView: 3,
+                            slidesPerGroup: 3,
+                            spaceBetween: 12
+                        },
+                        // Desktop - 4 PRODUTOS
                         768: {
                             slidesPerView: 4,
                             slidesPerGroup: 4,
+                            spaceBetween: 15
+                        },
+                        // Desktop grande
+                        1024: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4,
+                            spaceBetween: 20
+                        },
+                        // Desktop muito grande
+                        1200: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4,
+                            spaceBetween: 25
                         }
                     },
-                    {% if settings.product_color_variants or settings.quick_view %}
-                        on: {
-                            init: function () {
-                                updateClonedItemsIDs(".js-swiper-sale-products .js-item-slide.swiper-slide-duplicate");
-                            },
+                    
+                    // EVENTOS
+                    on: {
+                        init: function() {
+                            console.log('Carrossel de promocoes inicializado');
+                            console.log('Slides visiveis:', this.slidesPerViewDynamic());
+                            console.log('Total de produtos:', this.slides.length);
+                            
+                            // Força atualização inicial
+                            setTimeout(() => {
+                                this.update();
+                                this.updateSlidesClasses();
+                            }, 50);
+                        },
+                        
+                        afterInit: function() {
+                            console.log('Carrossel completamente configurado');
+                            this.updateSize();
+                            this.updateSlides();
+                            this.updateProgress();
+                            this.updateSlidesClasses();
+                        },
+                        
+                        resize: function() {
+                            console.log('Redimensionando carrossel');
+                            console.log('Novos slides visiveis:', this.slidesPerViewDynamic());
+                            this.update();
+                        },
+                        
+                        slideChange: function() {
+                            this.updateSlidesClasses();
+                            console.log('Slide alterado para:', this.activeIndex);
+                        },
+                        
+                        breakpoint: function(swiper, breakpointParams) {
+                            console.log('Breakpoint ativo:', Object.keys(this.currentBreakpoint || {}));
+                            console.log('Slides visiveis apos breakpoint:', this.slidesPerViewDynamic());
+                            
+                            // Update forçado após mudança de breakpoint
+                            setTimeout(() => {
+                                this.update();
+                                this.updateSlidesClasses();
+                            }, 100);
                         }
-                    {% endif %}
+                    }
                 });
+                
+                {% if settings.product_color_variants or settings.quick_view %}
+
+                    {# Clone swiper slides #}
+
+                    $(document).on('mouseenter', '.js-swiper-sale-products', function() {
+                        updateClonedItemsIDs('.js-swiper-sale-products .swiper-slide-duplicate .js-item-product');
+                    });
+
+                    {% if settings.product_color_variants %}
+                        $(document).on("change", ".js-variation-option", function(e) {
+                            var $this = $(this);
+                            var $variants_container = $this.closest(".js-quickshop-container");
+                            var $quickshop_variant_modal = $(".js-quickshop-container");
+                            var $variant_container_to_use = $variants_container;
+                            
+                            // Quando modal está aberto
+
+                            if($("#quickshop-modal").hasClass("js-quickshop-opened")){
+                                var $variant_container_to_use = $quickshop_variant_modal;
+                            }
+                            LS.changeVariant($variant_container_to_use, $(this).val(), function(variant){
+
+                                $variant_container_to_use.attr("data-quickshop-selected-variant", variant.id);
+                                
+                                var variant_color_image_option = $variant_container_to_use.find('#' + variant.id + '_color-text').attr('data-image');
+                                
+                                $variant_container_to_use.find('.js-item-product').attr("data-product-image", variant_color_image_option);
+
+                                // Actualizar imagen de producto en el item del carrusel de productos favoritos
+
+                                var $item_to_update_image = $('.js-item-product[data-product-id^="'+variant.product_id+'"].js-swiper-slide-visible');
+                                var $item_to_update_image_cloned = $('.js-item-product[data-product-id^="'+variant.product_id+'"].js-swiper-slide-visible.swiper-slide-duplicate');
+
+                                {# If item is cloned from swiper change only cloned item #}
+
+                                if($item_to_update_image.hasClass("swiper-slide-duplicate")){
+                                    var slide_item_index = $item_to_update_image_cloned.attr("data-swiper-slide-index");
+                                    var current_image = $('.js-item-image', '.js-item-product[data-product-id="'+variant.product_id+'-clone-'+slide_item_index+'" ]');
+                                }else{
+                                    var slide_item_index = $item_to_update_image.attr("data-swiper-slide-index");
+                                    var current_image = $('.js-item-image', '.js-item-product[data-product-id="'+variant.product_id+'"]');
+                                }
+                                current_image.attr('srcset', variant.image_url);
+                                {% if settings.product_hover %}
+                                    {# Remove secondary feature on image updated from changeVariant #}
+                                    current_image.closest(".js-item-with-secondary-image").removeClass("item-with-two-images");
+                                {% endif %}
+                            });
+                        });
+
+                        $(document).on("click", ".js-quickshop-modal-open", function (e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            if($this.hasClass("js-quickshop-slide")){
+                                $("#quickshop-modal .js-item-product").addClass("js-swiper-slide-visible js-item-slide");
+                            }
+                            LS.fillQuickshop($this);
+
+                            {# Image dimensions #}
+                            if ($(window).width() < 768) {
+                                var product_image_dimension = $(this).closest('.js-item-product').find('.js-item-image-container').attr("style");
+                                $("#quickshop-modal .js-quickshop-img-padding").attr("style", product_image_dimension);
+                            }
+
+                        });
+
+                    {% endif %}
+
+                    {% if settings.quick_view %}
+                        restoreQuickshopForm = function(){
+
+                            {# Clean quickshop modal #}
+
+                            $("#quickshop-modal .js-item-product").removeClass("js-swiper-slide-visible js-item-slide");
+                            $("#quickshop-modal .js-quickshop-container").attr( { 'data-variants' : '' , 'data-quickshop-id': '' } );
+                            $("#quickshop-modal .js-item-product").attr('data-product-id', '');
+
+                            {# Clean form #}
+
+                            $(".js-quickshop-form .js-product-slide-img").attr('srcset', '');
+                            $(".js-quickshop-form .js-quickshop-name").html('');
+                            $(".js-quickshop-form .js-quickshop-price").html('');
+                            $(".js-quickshop-form .js-quickshop-submit").attr('value', '');
+                            $(".js-quickshop-form .js-quickshop-quantity").val('1');
+                            $(".js-quickshop-form .js-quickshop-form-variant").remove();
+                            $(".js-quickshop-form").trigger("reset");
+
+                            {# Reset form submit #}
+
+                            $(".js-quickshop-form .js-quickshop-submit").removeAttr('disabled').removeClass('disabled');
+
+                            {# Clean quickshop modal shipping #}
+
+                            $("#quickshop-modal .js-fulfillment-info").hide();
+                            $("#quickshop-modal .js-shipping-calculator-container").hide();
+
+                        };
+
+                        $(document).on("click", ".js-quickshop-close", function (e) {
+                            restoreQuickshopForm();
+                        });
+
+                    {% endif %}
+
+                {% endif %}
+
+            {% endif %}
 
             {% endif %}
 
