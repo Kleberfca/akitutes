@@ -2780,243 +2780,326 @@ DOMContentLoaded.addEventOrExecute(() => {
 
     {% endif %}
 
-{% if template == 'home' %}
+// ============================================================================
+// CONFIGURAÇÃO OTIMIZADA DO CARROSSEL DE PROMOÇÕES - AKITUTES
+// SINCRONIZADA COM CSS: 4 produtos desktop | 2 produtos mobile
+// ============================================================================
 
-    {# /* // Products slider */ #}
-
-    {% if sections.sale.products %}
-        {% if settings.product_color_variants or settings.quick_view %}
-
-            {# Duplicate cloned slide elements for quickshop or colors forms #}
-
-            updateClonedItemsIDs = function(element){
-                jQueryNuvem(element).each(function(el) {
-                    var $this = jQueryNuvem(el);
-                    var slide_index = $this.attr("data-swiper-slide-index");
-                    var clone_quick_id = $this.find(".js-quickshop-container").attr("data-quickshop-id");
-                    var clone_product_id = $this.attr("data-product-id");
-                    $this.attr("data-product-id" , clone_product_id + "-clone-" + slide_index);
-                    $this.find(".js-quickshop-container").attr("data-quickshop-id" , clone_quick_id + "-clone-" + slide_index);
-                });
-            };
-
+{% if sections.sale.products %}
+    createSwiper('.js-swiper-sale-products', {
+        // ===== CONFIGURAÇÕES BASE =====
+        lazy: {
+            loadPrevNext: true,
+            loadPrevNextAmount: 2,
+            loadOnTransitionStart: true,
+        },
+        {% if sections.sale.products | length > 4 %}
+        loop: true,
+        loopFillGroupWithBlank: false,
         {% endif %}
+        watchOverflow: true,
+        centerInsufficientSlides: true,
+        watchSlidesVisibility: true,
+        slideVisibleClass: 'js-swiper-slide-visible',
         
-        // CONFIGURAÇÃO DEFINITIVA E CORRIGIDA DO CARROSSEL
-        createSwiper('.js-swiper-sale-products', {
-            lazy: true,
-            {% if sections.sale.products | length > 4 %}
-            loop: true,
-            {% endif %}
-            watchOverflow: true,
-            centerInsufficientSlides: true,
-            watchSlidesVisibility: true,
-            slideVisibleClass: 'js-swiper-slide-visible',
-            threshold: 5,
-            
-            // CONFIGURAÇÃO MOBILE PADRÃO
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 10,
-            
-            pagination: {
-                el: '.js-swiper-sale-products-pagination',
-                clickable: true,
+        // ===== PERFORMANCE E RESPONSIVIDADE =====
+        speed: 400,
+        threshold: 8,
+        shortSwipes: true,
+        longSwipes: true,
+        allowTouchMove: true,
+        simulateTouch: true,
+        grabCursor: true,
+        resistanceRatio: 0.85,
+        
+        // ===== OBSERVER PARA ATUALIZAÇÕES DINÂMICAS =====
+        observer: true,
+        observeParents: true,
+        observeSlideChildren: true,
+        
+        // ===== CONFIGURAÇÃO MOBILE PADRÃO (até 767px) =====
+        slidesPerView: 2,
+        slidesPerGroup: 2,
+        spaceBetween: 12,
+        
+        // ===== NAVEGAÇÃO =====
+        navigation: {
+            nextEl: '.js-swiper-sale-products-next',
+            prevEl: '.js-swiper-sale-products-prev',
+            disabledClass: 'swiper-button-disabled',
+        },
+        
+        // ===== PAGINAÇÃO =====
+        pagination: {
+            el: '.js-swiper-sale-products-pagination',
+            clickable: true,
+            dynamicBullets: false,
+            renderBullet: function(index, className) {
+                return '<span class="' + className + '" aria-label="Slide ' + (index + 1) + '"></span>';
             },
-            navigation: {
-                nextEl: '.js-swiper-sale-products-next',
-                prevEl: '.js-swiper-sale-products-prev',
-            },
-            
-            // BREAKPOINTS DEFINITIVOS - SOLUÇÃO PARA 4 PRODUTOS EXATOS
-            breakpoints: {
-                // Mobile pequeno
-                320: {
-                    slidesPerView: 2,
-                    slidesPerGroup: 2,
-                    spaceBetween: 8
-                },
-                // Mobile
-                480: {
-                    slidesPerView: 2,
-                    slidesPerGroup: 2,
-                    spaceBetween: 10
-                },
-                // Tablet
-                640: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
-                    spaceBetween: 10
-                },
-                // DESKTOP - 4 PRODUTOS EXATOS (SOLUÇÃO DEFINITIVA)
-                768: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                    spaceBetween: 0,
-                    width: null,
-                    watchSlidesProgress: true
-                },
-                // Desktop médio
-                1024: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                    spaceBetween: 0
-                },
-                // Desktop grande
-                1200: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                    spaceBetween: 0
-                }
+        },
+        
+        // ===== BREAKPOINTS RESPONSIVOS DEFINITIVOS =====
+        breakpoints: {
+            // Mobile extra pequeno (320px+)
+            320: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 8,
+                allowTouchMove: true,
             },
             
-            // EVENTOS PARA GARANTIR 4 PRODUTOS EXATOS
-            on: {
-                init: function() {
-                    console.log('Carrossel de promocoes inicializado');
-                    console.log('Slides visiveis: ' + this.slidesPerViewDynamic());
-                    console.log('Total produtos: ' + this.slides.length);
-                    
-                    // Força exactly 4 produtos no desktop
-                    if (window.innerWidth >= 768) {
-                        this.params.slidesPerView = 4;
-                        this.params.slidesPerGroup = 4;
-                        this.params.spaceBetween = 0;
-                    }
-                    
-                    // Update forçado
-                    setTimeout(() => {
-                        this.update();
-                        this.updateSlidesClasses();
-                    }, 100);
-                },
-                
-                resize: function() {
-                    console.log('Redimensionando carrossel');
-                    
-                    // Força configuração correta baseada na tela
-                    if (window.innerWidth >= 768) {
-                        this.params.slidesPerView = 4;
-                        this.params.slidesPerGroup = 4;
-                        this.params.spaceBetween = 0;
-                        console.log('Desktop: forcando 4 produtos');
-                    } else {
-                        this.params.slidesPerView = 2;
-                        this.params.slidesPerGroup = 2;
-                        this.params.spaceBetween = 10;
-                        console.log('Mobile: forcando 2 produtos');
-                    }
-                    
-                    this.update();
-                    console.log('Slides visiveis apos resize: ' + this.slidesPerViewDynamic());
-                },
-                
-                breakpoint: function() {
-                    console.log('Breakpoint alterado');
-                    console.log('Slides visiveis: ' + this.slidesPerViewDynamic());
-                    
-                    // Força update após breakpoint
-                    setTimeout(() => {
-                        this.update();
-                        this.updateSlidesClasses();
-                    }, 50);
-                }
+            // Mobile padrão (480px+)
+            480: {
+                slidesPerView: 2,
+                slidesPerGroup: 2,
+                spaceBetween: 10,
+                allowTouchMove: true,
+            },
+            
+            // Tablet pequeno (640px+)
+            640: {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 12,
+                allowTouchMove: true,
+            },
+            
+            // DESKTOP - 4 PRODUTOS EXATOS (768px+)
+            768: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 0,
+                allowTouchMove: true,
+                watchSlidesProgress: true,
+            },
+            
+            // Desktop médio (1024px+)
+            1024: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 0,
+                allowTouchMove: true,
+                watchSlidesProgress: true,
+            },
+            
+            // Desktop grande (1200px+)
+            1200: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 0,
+                allowTouchMove: true,
+                watchSlidesProgress: true,
             }
-        });
+        },
         
-        {% if settings.product_color_variants or settings.quick_view %}
-
-            {# Clone swiper slides #}
-
-            jQueryNuvem(document).on('mouseenter', '.js-swiper-sale-products', function() {
-                updateClonedItemsIDs('.js-swiper-sale-products .swiper-slide-duplicate .js-item-product');
-            });
-
-            {% if settings.product_color_variants %}
-                jQueryNuvem(document).on("change", ".js-variation-option", function(e) {
-                    var $this = jQueryNuvem(this);
-                    var $variants_container = $this.closest(".js-quickshop-container");
-                    var $quickshop_variant_modal = jQueryNuvem(".js-quickshop-container");
-                    var $variant_container_to_use = $variants_container;
+        // ===== EVENTOS PARA GARANTIR FUNCIONAMENTO PERFEITO =====
+        on: {
+            init: function() {
+                console.log('=== CARROSSEL AKITUTES INICIALIZADO ===');
+                console.log('Total de produtos: ' + this.slides.length);
+                console.log('Dispositivo: ' + (window.innerWidth >= 768 ? 'Desktop' : 'Mobile'));
+                console.log('Produtos visíveis: ' + this.slidesPerViewDynamic());
+                console.log('===================================');
+                
+                // Força configuração correta baseada na tela atual
+                const isDesktop = window.innerWidth >= 768;
+                if (isDesktop) {
+                    this.params.slidesPerView = 4;
+                    this.params.slidesPerGroup = 4;
+                    console.log('Desktop: configurado para 4 produtos');
+                } else {
+                    this.params.slidesPerView = 2;
+                    this.params.slidesPerGroup = 2;
+                    console.log('Mobile: configurado para 2 produtos');
+                }
+                
+                // Update após inicialização
+                setTimeout(() => {
+                    this.update();
+                    this.updateSlidesClasses();
+                    this.updateProgress();
                     
-                    if(jQueryNuvem("#quickshop-modal").hasClass("js-quickshop-opened")){
-                        var $variant_container_to_use = $quickshop_variant_modal;
+                    // Carrega imagens lazy se existirem
+                    const lazyImages = this.el.querySelectorAll('img[data-src]');
+                    if (lazyImages.length > 0) {
+                        console.log('Carregando ' + lazyImages.length + ' imagens lazy');
+                        lazyImages.forEach(function(img) {
+                            if (img.dataset.src && !img.src) {
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                            }
+                        });
                     }
-                    LS.changeVariant($variant_container_to_use, jQueryNuvem(this).val(), function(variant){
+                }, 150);
+            },
+            
+            resize: function() {
+                console.log('=== REDIMENSIONAMENTO DETECTADO ===');
+                const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
+                const expectedSlides = window.innerWidth >= 768 ? 4 : 2;
+                
+                console.log('Dispositivo: ' + device);
+                console.log('Produtos esperados: ' + expectedSlides);
+                
+                // Força configuração correta
+                if (window.innerWidth >= 768) {
+                    this.params.slidesPerView = 4;
+                    this.params.slidesPerGroup = 4;
+                    this.params.spaceBetween = 0;
+                } else {
+                    this.params.slidesPerView = 2;
+                    this.params.slidesPerGroup = 2;
+                    this.params.spaceBetween = 12;
+                }
+                
+                // Update completo
+                this.update();
+                this.updateSize();
+                this.updateSlidesClasses();
+                this.updateProgress();
+                
+                console.log('Produtos visíveis após resize: ' + this.slidesPerViewDynamic());
+                console.log('===============================');
+            },
+            
+            breakpoint: function(swiper, breakpointParams) {
+                console.log('=== BREAKPOINT ALTERADO ===');
+                const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
+                console.log('Dispositivo atual: ' + device);
+                console.log('Slides configurados: ' + breakpointParams.slidesPerView);
+                
+                // Força update após mudança de breakpoint
+                setTimeout(() => {
+                    this.update();
+                    this.updateSlidesClasses();
+                    this.updateProgress();
+                    
+                    console.log('Breakpoint aplicado com sucesso');
+                    console.log('Produtos visíveis: ' + this.slidesPerViewDynamic());
+                }, 100);
+                
+                console.log('==========================');
+            },
+            
+            slideChange: function() {
+                // Update das classes visuais
+                this.updateSlidesClasses();
+                
+                // Log apenas quando em modo debug
+                if (window.location.href.includes('debug=1')) {
+                    console.log('Slide ativo: ' + (this.activeIndex + 1));
+                }
+            },
+            
+            observerUpdate: function() {
+                // Atualiza quando há mudanças no DOM
+                this.update();
+                
+                if (window.location.href.includes('debug=1')) {
+                    console.log('Observer: DOM atualizado');
+                }
+            },
+            
+            lazyImageLoad: function() {
+                // Callback quando imagem lazy é carregada
+                this.update();
+            }
+        }
+    });
+    
+    // ===== FUNCIONALIDADES EXTRAS =====
+    
+    {% if settings.product_color_variants or settings.quick_view %}
+        // Atualiza IDs dos produtos clonados (para loop)
+        jQueryNuvem(document).on('mouseenter', '.js-swiper-sale-products', function() {
+            updateClonedItemsIDs('.js-swiper-sale-products .swiper-slide-duplicate .js-item-product');
+        });
 
-                        $variant_container_to_use.attr("data-quickshop-selected-variant", variant.id);
-                        
-                        var variant_color_image_option = $variant_container_to_use.find('#' + variant.id + '_color-text').attr('data-image');
-                        
-                        $variant_container_to_use.find('.js-item-product').attr("data-product-image", variant_color_image_option);
-
-                        var $item_to_update_image = jQueryNuvem('.js-item-product[data-product-id^="'+variant.product_id+'"].js-swiper-slide-visible');
-                        var $item_to_update_image_cloned = jQueryNuvem('.js-item-product[data-product-id^="'+variant.product_id+'"].js-swiper-slide-visible.swiper-slide-duplicate');
-
-                        if($item_to_update_image.hasClass("swiper-slide-duplicate")){
-                            var slide_item_index = $item_to_update_image_cloned.attr("data-swiper-slide-index");
-                            var current_image = jQueryNuvem('.js-item-image', '.js-item-product[data-product-id="'+variant.product_id+'-clone-'+slide_item_index+'" ]');
-                        }else{
-                            var slide_item_index = $item_to_update_image.attr("data-swiper-slide-index");
-                            var current_image = jQueryNuvem('.js-item-image', '.js-item-product[data-product-id="'+variant.product_id+'"]');
-                        }
-                        current_image.attr('srcset', variant.image_url);
-                        {% if settings.product_hover %}
-                            current_image.closest(".js-item-with-secondary-image").removeClass("item-with-two-images");
-                        {% endif %}
-                    });
-                });
-
-                jQueryNuvem(document).on("click", ".js-quickshop-modal-open", function (e) {
-                    e.preventDefault();
-                    var $this = jQueryNuvem(this);
-                    if($this.hasClass("js-quickshop-slide")){
-                        jQueryNuvem("#quickshop-modal .js-item-product").addClass("js-swiper-slide-visible js-item-slide");
+        {% if settings.product_color_variants %}
+            // Variantes de cor nos produtos do carrossel
+            jQueryNuvem(document).on('mouseenter', '.js-swiper-sale-products .js-item-variant', function(e) {
+                const $this = jQueryNuvem(this);
+                const $item = $this.closest('.js-item-product');
+                
+                if ($item.length) {
+                    const imageSrc = $this.data('image-src');
+                    if (imageSrc) {
+                        $item.find('.js-item-image').attr('src', imageSrc);
                     }
-                    LS.fillQuickshop($this);
-
-                    if (jQueryNuvem(window).width() < 768) {
-                        var product_image_dimension = jQueryNuvem(this).closest('.js-item-product').find('.js-item-image-container').attr("style");
-                        jQueryNuvem("#quickshop-modal .js-quickshop-img-padding").attr("style", product_image_dimension);
-                    }
-
-                });
-
-            {% endif %}
-
-            {% if settings.quick_view %}
-                restoreQuickshopForm = function(){
-
-                    jQueryNuvem("#quickshop-modal .js-item-product").removeClass("js-swiper-slide-visible js-item-slide");
-                    jQueryNuvem("#quickshop-modal .js-quickshop-container").attr( { 'data-variants' : '' , 'data-quickshop-id': '' } );
-                    jQueryNuvem("#quickshop-modal .js-item-product").attr('data-product-id', '');
-
-                    jQueryNuvem(".js-quickshop-form .js-product-slide-img").attr('srcset', '');
-                    jQueryNuvem(".js-quickshop-form .js-quickshop-name").html('');
-                    jQueryNuvem(".js-quickshop-form .js-quickshop-price").html('');
-                    jQueryNuvem(".js-quickshop-form .js-quickshop-submit").attr('value', '');
-                    jQueryNuvem(".js-quickshop-form .js-quickshop-quantity").val('1');
-                    jQueryNuvem(".js-quickshop-form .js-quickshop-form-variant").remove();
-                    jQueryNuvem(".js-quickshop-form").trigger("reset");
-
-                    jQueryNuvem(".js-quickshop-form .js-quickshop-submit").removeAttr('disabled').removeClass('disabled');
-
-                    jQueryNuvem("#quickshop-modal .js-fulfillment-info").hide();
-                    jQueryNuvem("#quickshop-modal .js-shipping-calculator-container").hide();
-
-                };
-
-                jQueryNuvem(document).on("click", ".js-quickshop-close", function (e) {
-                    restoreQuickshopForm();
-                });
-
-            {% endif %}
-
+                }
+            });
         {% endif %}
 
+        {% if settings.quick_view %}
+            // Quick view nos produtos do carrossel
+            jQueryNuvem(document).on('click', '.js-swiper-sale-products .js-quickshop-container', function(e) {
+                e.preventDefault();
+                const productId = jQueryNuvem(this).data('quickshop-id');
+                if (productId) {
+                    LS.openQuickShop(productId);
+                }
+            });
+        {% endif %}
     {% endif %}
+    
+    // ===== FUNÇÕES GLOBAIS DE DEBUG =====
+    if (typeof window !== 'undefined') {
+        // Função para verificar status do carrossel
+        window.checkAkitutesCarousel = function() {
+            const container = document.querySelector('.js-swiper-sale-products');
+            if (container && container.swiper) {
+                const swiper = container.swiper;
+                const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
+                const expected = window.innerWidth >= 768 ? 4 : 2;
+                const actual = swiper.slidesPerViewDynamic();
+                
+                console.log('=== STATUS CARROSSEL AKITUTES ===');
+                console.log('Dispositivo: ' + device);
+                console.log('Produtos esperados: ' + expected);
+                console.log('Produtos visíveis: ' + actual);
+                console.log('Status: ' + (actual === expected ? 'CORRETO' : 'INCORRETO'));
+                console.log('Total produtos: ' + swiper.slides.length);
+                console.log('Slide ativo: ' + (swiper.activeIndex + 1));
+                console.log('Loop ativo: ' + swiper.params.loop);
+                console.log('==============================');
+                
+                return swiper;
+            } else {
+                console.log('Carrossel não encontrado ou não inicializado');
+                return null;
+            }
+        };
+        
+        // Função para forçar atualização do carrossel
+        window.fixAkitutesCarousel = function() {
+            const container = document.querySelector('.js-swiper-sale-products');
+            if (container && container.swiper) {
+                const swiper = container.swiper;
+                console.log('Forçando atualização do carrossel...');
+                
+                swiper.update();
+                swiper.updateSize();
+                swiper.updateSlidesClasses();
+                swiper.updateProgress();
+                
+                setTimeout(() => {
+                    window.checkAkitutesCarousel();
+                }, 200);
+            } else {
+                console.log('Carrossel não encontrado para correção');
+            }
+        };
+        
+        console.log('Sistema de carrossel Akitutes carregado');
+        console.log('Funções disponíveis: checkAkitutesCarousel(), fixAkitutesCarousel()');
+    }
 
 {% endif %}
+
+// ============================================================================
+// FIM DA CONFIGURAÇÃO OTIMIZADA DO CARROSSEL
+// ============================================================================
 
 });
 

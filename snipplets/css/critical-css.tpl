@@ -2509,10 +2509,11 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
 
 /* =============================================================================
    CORREÇÃO DEFINITIVA VISUAL - CARROSSEL AKITUTES
-   RESOLVE: Centralização, Setas Cortadas, Faixa Branca
+   LAYOUT RESPONSIVO: 4 produtos desktop | 2 produtos mobile
+   RESOLVE: Centralização, Setas, Espaçamento, Altura, Background
    ============================================================================= */
 
-/* Reset e estrutura base da seção */
+/* ===== RESET E ESTRUTURA BASE DA SEÇÃO ===== */
 [data-store="home-products-sale"] {
   margin: 40px auto !important;
   padding: 0 !important;
@@ -2520,32 +2521,43 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   width: 100% !important;
   overflow: visible !important;
   background: transparent !important;
+  clear: both !important;
 }
 
 [data-store="home-products-sale"] .row {
   margin: 0 !important;
   padding: 0 !important;
+  width: 100% !important;
 }
 
 [data-store="home-products-sale"] .container {
   padding: 0 15px !important;
   max-width: 100% !important;
+  margin: 0 auto !important;
 }
 
-/* Título da seção */
+/* ===== TÍTULO DA SEÇÃO ===== */
 [data-store="home-products-sale"] .title-container {
   text-align: center !important;
   margin-bottom: 30px !important;
   padding: 0 !important;
 }
 
-/* Container principal do carrossel com espaço para setas */
+[data-store="home-products-sale"] .title-container .title {
+  color: #333 !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  letter-spacing: 1px !important;
+}
+
+/* ===== CONTAINER PRINCIPAL DO CARROSSEL ===== */
 [data-store="home-products-sale"] .products-slider {
   position: relative !important;
   margin: 0 auto !important;
-  padding: 0 60px !important;
+  padding: 0 70px !important; /* Espaço para setas desktop */
   max-width: 100% !important;
   background: transparent !important;
+  overflow: visible !important;
 }
 
 /* Remove comportamento de grid/masonry */
@@ -2560,7 +2572,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   column-fill: auto !important;
 }
 
-/* Container do Swiper */
+/* ===== CONTAINER DO SWIPER ===== */
 .js-swiper-sale-products {
   display: block !important;
   overflow: hidden !important;
@@ -2573,14 +2585,14 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   border-radius: 0 !important;
 }
 
-/* Wrapper dos slides */
+/* ===== WRAPPER DOS SLIDES ===== */
 .js-swiper-sale-products .swiper-wrapper {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   height: auto !important;
   align-items: flex-start !important;
-  justify-content: center !important;
+  justify-content: flex-start !important;
   transition-property: transform !important;
   transition-duration: 300ms !important;
   margin: 0 !important;
@@ -2589,7 +2601,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   background: transparent !important;
 }
 
-/* Slides individuais */
+/* ===== SLIDES INDIVIDUAIS ===== */
 .js-swiper-sale-products .swiper-slide {
   display: block !important;
   flex-shrink: 0 !important;
@@ -2598,35 +2610,43 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   position: relative !important;
   box-sizing: border-box !important;
   margin: 0 !important;
-  padding: 0 8px !important;
   background: transparent !important;
 }
 
-/* CONFIGURAÇÃO RESPONSIVA DE LARGURA */
+/* ===== CONFIGURAÇÃO RESPONSIVA DE LARGURA ===== */
 
 /* Mobile (até 767px) - 2 produtos */
 @media (max-width: 767px) {
   [data-store="home-products-sale"] .products-slider {
-    padding: 0 15px !important;
+    padding: 0 15px !important; /* Remove espaço para setas no mobile */
   }
   
   .js-swiper-sale-products .swiper-slide {
     width: 50% !important;
     flex: 0 0 50% !important;
-    padding: 0 5px !important;
+    padding: 0 6px !important; /* Espaçamento entre produtos mobile */
   }
 }
 
-/* Desktop (768px+) - 4 produtos */
-@media (min-width: 768px) {
+/* Tablet (768px - 1023px) - 3 produtos */
+@media (min-width: 768px) and (max-width: 1023px) {
   .js-swiper-sale-products .swiper-slide {
-    width: 25% !important;
-    flex: 0 0 25% !important;
+    width: 33.333% !important;
+    flex: 0 0 33.333% !important;
     padding: 0 8px !important;
   }
 }
 
-/* Container dos produtos individuais */
+/* Desktop (1024px+) - 4 produtos */
+@media (min-width: 1024px) {
+  .js-swiper-sale-products .swiper-slide {
+    width: 25% !important;
+    flex: 0 0 25% !important;
+    padding: 0 10px !important; /* Espaçamento entre produtos desktop */
+  }
+}
+
+/* ===== CONTAINER DOS PRODUTOS INDIVIDUAIS ===== */
 .js-swiper-sale-products .item-container,
 .js-swiper-sale-products .js-masonry-grid-item {
   display: block !important;
@@ -2637,111 +2657,193 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   background: transparent !important;
 }
 
-/* Cards dos produtos */
+/* ===== CARDS DOS PRODUTOS ===== */
 .js-swiper-sale-products .item {
-  height: auto !important;
-  min-height: 350px !important;
+  height: 100% !important;
+  min-height: 380px !important;
   display: flex !important;
   flex-direction: column !important;
-  border-radius: 15px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
   transition: all 0.3s ease !important;
   margin: 0 !important;
   overflow: hidden !important;
   background: #fff !important;
-  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+  position: relative !important;
 }
 
 /* Hover effect nos produtos */
 .js-swiper-sale-products .item:hover {
-  transform: translateY(-3px) !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Container das imagens */
+/* ===== CONTAINER DAS IMAGENS ===== */
 .js-swiper-sale-products .item-image-container {
-  height: 200px !important;
-  max-height: 200px !important;
-  min-height: 200px !important;
+  height: 220px !important;
+  max-height: 220px !important;
+  min-height: 220px !important;
   overflow: hidden !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-top-left-radius: 15px !important;
-  border-top-right-radius: 15px !important;
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
   background: #f8f9fa !important;
+  position: relative !important;
 }
 
-/* Informações dos produtos */
+/* Imagens dos produtos */
+.js-swiper-sale-products .item-image-container .item-image {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.3s ease !important;
+}
+
+.js-swiper-sale-products .item:hover .item-image {
+  transform: scale(1.05) !important;
+}
+
+/* ===== INFORMAÇÕES DOS PRODUTOS ===== */
 .js-swiper-sale-products .item-info-container {
-  padding: 15px !important;
+  padding: 16px !important;
   flex-grow: 1 !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   background: #fff !important;
-  border-bottom-left-radius: 15px !important;
-  border-bottom-right-radius: 15px !important;
+  border-bottom-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  min-height: 120px !important;
 }
 
-/* SETAS DE NAVEGAÇÃO - POSICIONAMENTO CORRETO */
+/* Nome do produto */
+.js-swiper-sale-products .item-name {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  margin-bottom: 8px !important;
+  color: #333 !important;
+  text-align: center !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  min-height: 36px !important;
+}
+
+/* Preços */
+.js-swiper-sale-products .item-price-container {
+  text-align: center !important;
+  margin-top: auto !important;
+}
+
+.js-swiper-sale-products .item-price {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #333 !important;
+}
+
+/* ===== SETAS DE NAVEGAÇÃO ===== */
 .js-swiper-sale-products-prev,
 .js-swiper-sale-products-next {
   position: absolute !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 10 !important;
-  width: 50px !important;
-  height: 50px !important;
+  width: 44px !important;
+  height: 44px !important;
   background: rgba(255, 255, 255, 0.95) !important;
   border-radius: 50% !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
   transition: all 0.3s ease !important;
-  border: 2px solid rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  opacity: 0.9 !important;
 }
 
-/* Posicionamento das setas - DENTRO DA ÁREA VISÍVEL */
+/* Posicionamento das setas */
 .js-swiper-sale-products-prev {
-  left: 10px !important;
+  left: 15px !important;
 }
 
 .js-swiper-sale-products-next {
-  right: 10px !important;
+  right: 15px !important;
 }
 
 /* Hover effect nas setas */
 .js-swiper-sale-products-prev:hover,
 .js-swiper-sale-products-next:hover {
   background: rgba(255, 255, 255, 1) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
   transform: translateY(-50%) scale(1.05) !important;
+  opacity: 1 !important;
 }
 
 /* Ícones das setas */
 .js-swiper-sale-products-prev .slider-arrow,
 .js-swiper-sale-products-next .slider-arrow {
-  width: 16px !important;
-  height: 16px !important;
+  width: 14px !important;
+  height: 14px !important;
   fill: #333 !important;
+  opacity: 0.8 !important;
 }
 
-/* MOBILE: Configurações específicas */
+/* ===== PAGINAÇÃO ===== */
+.js-swiper-sale-products-pagination {
+  position: relative !important;
+  margin-top: 24px !important;
+  margin-bottom: 0 !important;
+  text-align: center !important;
+  height: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.js-swiper-sale-products-pagination .swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  margin: 0 4px !important;
+  border-radius: 50% !important;
+  opacity: 0.4 !important;
+  cursor: pointer !important;
+  background: #333 !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+}
+
+.js-swiper-sale-products-pagination .swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  transform: scale(1.4) !important;
+  background: #007bff !important;
+}
+
+.js-swiper-sale-products-pagination .swiper-pagination-bullet:hover {
+  opacity: 0.7 !important;
+  transform: scale(1.2) !important;
+}
+
+/* ===== RESPONSIVIDADE MOBILE ===== */
 @media (max-width: 767px) {
-  [data-store="home-products-sale"] .products-slider {
-    padding: 0 10px !important;
+  /* Container principal mobile */
+  [data-store="home-products-sale"] {
+    margin: 30px auto !important;
   }
   
+  /* Oculta setas no mobile */
   .js-swiper-sale-products-prev,
   .js-swiper-sale-products-next {
     display: none !important;
   }
   
+  /* Ajustes dos cards mobile */
   .js-swiper-sale-products .item {
-    min-height: 300px !important;
+    min-height: 320px !important;
   }
   
   .js-swiper-sale-products .item-image-container {
@@ -2752,13 +2854,56 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   
   .js-swiper-sale-products .item-info-container {
     padding: 12px !important;
+    min-height: 100px !important;
+  }
+  
+  .js-swiper-sale-products .item-name {
+    font-size: 13px !important;
+    min-height: 32px !important;
+  }
+  
+  .js-swiper-sale-products .item-price {
+    font-size: 15px !important;
   }
 }
 
-/* DESKTOP: Ajustes específicos */
-@media (min-width: 768px) {
+/* ===== RESPONSIVIDADE TABLET ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  [data-store="home-products-sale"] .products-slider {
+    padding: 0 60px !important;
+  }
+  
   .js-swiper-sale-products .item {
-    min-height: 380px !important;
+    min-height: 360px !important;
+  }
+  
+  .js-swiper-sale-products .item-image-container {
+    height: 200px !important;
+    max-height: 200px !important;
+    min-height: 200px !important;
+  }
+}
+
+/* ===== RESPONSIVIDADE DESKTOP GRANDE ===== */
+@media (min-width: 1200px) {
+  [data-store="home-products-sale"] {
+    max-width: 1200px !important;
+  }
+  
+  [data-store="home-products-sale"] .products-slider {
+    padding: 0 80px !important;
+  }
+  
+  .js-swiper-sale-products-prev {
+    left: 20px !important;
+  }
+  
+  .js-swiper-sale-products-next {
+    right: 20px !important;
+  }
+  
+  .js-swiper-sale-products .item {
+    min-height: 400px !important;
   }
   
   .js-swiper-sale-products .item-image-container {
@@ -2768,41 +2913,7 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   }
 }
 
-/* PAGINAÇÃO - CENTRALIZADA E ESTILIZADA */
-.js-swiper-sale-products-pagination {
-  position: relative !important;
-  margin-top: 25px !important;
-  margin-bottom: 0 !important;
-  text-align: center !important;
-  height: auto !important;
-  padding: 0 !important;
-  background: transparent !important;
-}
-
-.js-swiper-sale-products-pagination .swiper-pagination-bullet {
-  width: 10px !important;
-  height: 10px !important;
-  margin: 0 5px !important;
-  border-radius: 50% !important;
-  opacity: 0.3 !important;
-  cursor: pointer !important;
-  background: #333 !important;
-  transition: all 0.3s ease !important;
-  border: none !important;
-}
-
-.js-swiper-sale-products-pagination .swiper-pagination-bullet-active {
-  opacity: 1 !important;
-  transform: scale(1.3) !important;
-  background: #007bff !important;
-}
-
-.js-swiper-sale-products-pagination .swiper-pagination-bullet:hover {
-  opacity: 0.7 !important;
-  transform: scale(1.1) !important;
-}
-
-/* REMOVE ESPAÇOS EM BRANCO INDESEJADOS */
+/* ===== LIMPEZA DE ESTILOS CONFLITANTES ===== */
 [data-store="home-products-sale"] .item-container,
 [data-store="home-products-sale"] .js-masonry-grid-item {
   min-height: auto !important;
@@ -2829,56 +2940,46 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   opacity: 1 !important;
 }
 
-/* REMOVE FAIXA BRANCA - CORREÇÃO ESPECÍFICA */
+/* Remove pseudo-elementos que causam faixa branca */
 [data-store="home-products-sale"]::after,
 [data-store="home-products-sale"] .products-slider::after,
-.js-swiper-sale-products::after {
-  display: none !important;
-  content: none !important;
-}
-
-[data-store="home-products-sale"] .row::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* Garante que não há espaçamento extra */
+.js-swiper-sale-products::after,
+[data-store="home-products-sale"] .row::after,
 [data-store="home-products-sale"] .swiper-wrapper::after,
 [data-store="home-products-sale"] .swiper-slide::after {
   display: none !important;
   content: none !important;
 }
 
-/* AJUSTES FINAIS PARA DESKTOP GRANDE */
-@media (min-width: 1200px) {
-  [data-store="home-products-sale"] {
-    max-width: 1200px !important;
-    margin: 40px auto !important;
-  }
-  
-  [data-store="home-products-sale"] .products-slider {
-    padding: 0 80px !important;
-  }
-  
-  .js-swiper-sale-products-prev {
-    left: 20px !important;
-  }
-  
-  .js-swiper-sale-products-next {
-    right: 20px !important;
-  }
-}
-
-/* Compatibilidade com navegadores antigos */
+/* ===== COMPATIBILIDADE COM NAVEGADORES ANTIGOS ===== */
 .js-swiper-sale-products .item {
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
-  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
+/* ===== AJUSTES PARA CARREGAMENTO ===== */
+.js-swiper-sale-products .item-image.lazyload:not([src]) {
+  background-color: #f0f0f0 !important;
+  opacity: 0.7 !important;
+}
+
+/* Loading de imagens - melhoria na experiência */
+.js-swiper-sale-products .item-image-container {
+  background-color: #f8f9fa !important;
+}
+
+/* Transições suaves durante redimensionamento */
+.js-swiper-sale-products .item-container,
+.js-swiper-sale-products .js-masonry-grid-item {
+  transition: all 0.3s ease !important;
+}
+
+/* ===== FIM DA CORREÇÃO DEFINITIVA CARROSSEL AKITUTES ===== */
 
 {#/*============================================================================
   #Utilities classes
