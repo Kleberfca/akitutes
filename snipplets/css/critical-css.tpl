@@ -2199,15 +2199,44 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
 }
 
 /* =============================================================================
-   CORREÇÃO DEFINITIVA CARROSSEL AKITUTES - 4 PRODUTOS EXATOS
-   SUBSTITUI TODOS OS CÓDIGOS ANTERIORES
+   CORREÇÃO DEFINITIVA VISUAL - CARROSSEL AKITUTES
+   RESOLVE: Centralização, Setas Cortadas, Faixa Branca
    ============================================================================= */
 
-/* Reset seção de promoções */
+/* Reset e estrutura base da seção */
 [data-store="home-products-sale"] {
-  margin: 40px 0 !important;
-  padding: 0 15px !important;
+  margin: 40px auto !important;
+  padding: 0 !important;
+  max-width: 1200px !important;
+  width: 100% !important;
   overflow: visible !important;
+  background: transparent !important;
+}
+
+[data-store="home-products-sale"] .row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+[data-store="home-products-sale"] .container {
+  padding: 0 15px !important;
+  max-width: 100% !important;
+}
+
+/* Título da seção */
+[data-store="home-products-sale"] .title-container {
+  text-align: center !important;
+  margin-bottom: 30px !important;
+  padding: 0 !important;
+}
+
+/* Container principal do carrossel com espaço para setas */
+[data-store="home-products-sale"] .products-slider {
+  position: relative !important;
+  margin: 0 auto !important;
+  padding: 0 60px !important;
+  max-width: 100% !important;
+  background: transparent !important;
 }
 
 /* Remove comportamento de grid/masonry */
@@ -2219,9 +2248,10 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   align-items: normal !important;
   column-count: auto !important;
   column-gap: 0 !important;
+  column-fill: auto !important;
 }
 
-/* Container principal do carrossel */
+/* Container do Swiper */
 .js-swiper-sale-products {
   display: block !important;
   overflow: hidden !important;
@@ -2229,6 +2259,9 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   width: 100% !important;
   height: auto !important;
   box-sizing: border-box !important;
+  margin: 0 auto !important;
+  background: transparent !important;
+  border-radius: 0 !important;
 }
 
 /* Wrapper dos slides */
@@ -2237,12 +2270,14 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   height: auto !important;
-  align-items: normal !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
   transition-property: transform !important;
   transition-duration: 300ms !important;
   margin: 0 !important;
   padding: 0 !important;
   position: relative !important;
+  background: transparent !important;
 }
 
 /* Slides individuais */
@@ -2254,56 +2289,43 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   position: relative !important;
   box-sizing: border-box !important;
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 0 8px !important;
+  background: transparent !important;
 }
 
-/* CONFIGURAÇÃO CRÍTICA DE LARGURA DOS SLIDES */
+/* CONFIGURAÇÃO RESPONSIVA DE LARGURA */
 
-/* Mobile (até 767px) - 2 produtos EXATOS */
+/* Mobile (até 767px) - 2 produtos */
 @media (max-width: 767px) {
-  .js-swiper-sale-products .swiper-slide {
-    width: calc(50% - 5px) !important;
-    flex: 0 0 calc(50% - 5px) !important;
-    margin-right: 10px !important;
+  [data-store="home-products-sale"] .products-slider {
+    padding: 0 15px !important;
   }
   
-  .js-swiper-sale-products .swiper-slide:nth-child(2n) {
-    margin-right: 0 !important;
+  .js-swiper-sale-products .swiper-slide {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    padding: 0 5px !important;
   }
 }
 
-/* Desktop (768px+) - 4 produtos EXATOS SEM CORTES */
+/* Desktop (768px+) - 4 produtos */
 @media (min-width: 768px) {
   .js-swiper-sale-products .swiper-slide {
     width: 25% !important;
     flex: 0 0 25% !important;
-    margin-right: 0 !important;
-    padding: 0 5px !important;
-  }
-  
-  /* Força container para mostrar exatamente 4 produtos */
-  .js-swiper-sale-products .swiper-wrapper {
-    justify-content: flex-start !important;
-  }
-  
-  /* Remove qualquer margin que possa causar cortes */
-  .js-swiper-sale-products .swiper-slide:first-child {
-    padding-left: 0 !important;
-  }
-  
-  .js-swiper-sale-products .swiper-slide:last-child {
-    padding-right: 0 !important;
+    padding: 0 8px !important;
   }
 }
 
-/* Container dos produtos */
+/* Container dos produtos individuais */
 .js-swiper-sale-products .item-container,
 .js-swiper-sale-products .js-masonry-grid-item {
   display: block !important;
   width: 100% !important;
-  padding: 8px !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
   margin: 0 !important;
+  background: transparent !important;
 }
 
 /* Cards dos produtos */
@@ -2313,20 +2335,21 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   display: flex !important;
   flex-direction: column !important;
   border-radius: 15px !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.3s ease !important;
   margin: 0 !important;
   overflow: hidden !important;
   background: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Hover effect */
+/* Hover effect nos produtos */
 .js-swiper-sale-products .item:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Imagens dos produtos */
+/* Container das imagens */
 .js-swiper-sale-products .item-image-container {
   height: 200px !important;
   max-height: 200px !important;
@@ -2337,27 +2360,77 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   justify-content: center !important;
   border-top-left-radius: 15px !important;
   border-top-right-radius: 15px !important;
+  background: #f8f9fa !important;
 }
 
-/* Ajustes para desktop */
-@media (min-width: 768px) {
-  .js-swiper-sale-products .item {
-    min-height: 380px !important;
-  }
-  
-  .js-swiper-sale-products .item-image-container {
-    height: 240px !important;
-    max-height: 240px !important;
-    min-height: 240px !important;
-  }
-  
-  .js-swiper-sale-products .item-container {
-    padding: 10px !important;
-  }
+/* Informações dos produtos */
+.js-swiper-sale-products .item-info-container {
+  padding: 15px !important;
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background: #fff !important;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
 }
 
-/* Ajustes para mobile pequeno */
-@media (max-width: 480px) {
+/* SETAS DE NAVEGAÇÃO - POSICIONAMENTO CORRETO */
+.js-swiper-sale-products-prev,
+.js-swiper-sale-products-next {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 10 !important;
+  width: 50px !important;
+  height: 50px !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  border: 2px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Posicionamento das setas - DENTRO DA ÁREA VISÍVEL */
+.js-swiper-sale-products-prev {
+  left: 10px !important;
+}
+
+.js-swiper-sale-products-next {
+  right: 10px !important;
+}
+
+/* Hover effect nas setas */
+.js-swiper-sale-products-prev:hover,
+.js-swiper-sale-products-next:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-50%) scale(1.05) !important;
+}
+
+/* Ícones das setas */
+.js-swiper-sale-products-prev .slider-arrow,
+.js-swiper-sale-products-next .slider-arrow {
+  width: 16px !important;
+  height: 16px !important;
+  fill: #333 !important;
+}
+
+/* MOBILE: Configurações específicas */
+@media (max-width: 767px) {
+  [data-store="home-products-sale"] .products-slider {
+    padding: 0 10px !important;
+  }
+  
+  .js-swiper-sale-products-prev,
+  .js-swiper-sale-products-next {
+    display: none !important;
+  }
+  
   .js-swiper-sale-products .item {
     min-height: 300px !important;
   }
@@ -2368,101 +2441,77 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
     min-height: 180px !important;
   }
   
-  .js-swiper-sale-products .item-container {
-    padding: 6px !important;
+  .js-swiper-sale-products .item-info-container {
+    padding: 12px !important;
   }
 }
 
-/* Container com espaço para setas */
-[data-store="home-products-sale"] .products-slider {
-  position: relative !important;
-  margin: 0 30px !important;
-}
-
-/* Setas de navegação */
-.js-swiper-sale-products-prev,
-.js-swiper-sale-products-next {
-  position: absolute !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  z-index: 20 !important;
-  width: 44px !important;
-  height: 44px !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-radius: 50% !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  transition: all 0.3s ease !important;
-}
-
-.js-swiper-sale-products-prev {
-  left: -22px !important;
-}
-
-.js-swiper-sale-products-next {
-  right: -22px !important;
-}
-
-.js-swiper-sale-products-prev:hover,
-.js-swiper-sale-products-next:hover {
-  background: rgba(255, 255, 255, 1) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
-}
-
-/* Mobile: esconde setas */
-@media (max-width: 767px) {
-  [data-store="home-products-sale"] .products-slider {
-    margin: 0 !important;
+/* DESKTOP: Ajustes específicos */
+@media (min-width: 768px) {
+  .js-swiper-sale-products .item {
+    min-height: 380px !important;
   }
   
-  .js-swiper-sale-products-prev,
-  .js-swiper-sale-products-next {
-    display: none !important;
+  .js-swiper-sale-products .item-image-container {
+    height: 240px !important;
+    max-height: 240px !important;
+    min-height: 240px !important;
   }
 }
 
-/* Paginação */
+/* PAGINAÇÃO - CENTRALIZADA E ESTILIZADA */
 .js-swiper-sale-products-pagination {
   position: relative !important;
-  margin-top: 20px !important;
+  margin-top: 25px !important;
+  margin-bottom: 0 !important;
   text-align: center !important;
   height: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 .js-swiper-sale-products-pagination .swiper-pagination-bullet {
-  width: 8px !important;
-  height: 8px !important;
-  margin: 0 4px !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 5px !important;
   border-radius: 50% !important;
   opacity: 0.3 !important;
   cursor: pointer !important;
-  background: #000 !important;
+  background: #333 !important;
   transition: all 0.3s ease !important;
+  border: none !important;
 }
 
 .js-swiper-sale-products-pagination .swiper-pagination-bullet-active {
   opacity: 1 !important;
-  transform: scale(1.2) !important;
+  transform: scale(1.3) !important;
+  background: #007bff !important;
 }
 
-/* Remove interferências */
+.js-swiper-sale-products-pagination .swiper-pagination-bullet:hover {
+  opacity: 0.7 !important;
+  transform: scale(1.1) !important;
+}
+
+/* REMOVE ESPAÇOS EM BRANCO INDESEJADOS */
 [data-store="home-products-sale"] .item-container,
 [data-store="home-products-sale"] .js-masonry-grid-item {
   min-height: auto !important;
   display: block !important;
   flex-direction: column !important;
   break-inside: auto !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
 
-/* Força comportamento do Swiper */
+/* Força comportamento correto do Swiper */
 .js-swiper-sale-products.swiper-container,
 .js-swiper-sale-products.swiper-container-initialized {
   display: block !important;
   overflow: hidden !important;
   width: 100% !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 /* Estados dos slides */
@@ -2471,38 +2520,67 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   opacity: 1 !important;
 }
 
-/* FORÇA EXATAMENTE 4 PRODUTOS NO DESKTOP - OVERRIDE FINAL */
-@media (min-width: 768px) {
-  .js-swiper-sale-products[data-slides-per-view="4"] .swiper-slide {
-    width: 25% !important;
-    flex: 0 0 25% !important;
-    max-width: 25% !important;
-    margin: 0 !important;
-    padding: 0 5px !important;
+/* REMOVE FAIXA BRANCA - CORREÇÃO ESPECÍFICA */
+[data-store="home-products-sale"]::after,
+[data-store="home-products-sale"] .products-slider::after,
+.js-swiper-sale-products::after {
+  display: none !important;
+  content: none !important;
+}
+
+[data-store="home-products-sale"] .row::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Garante que não há espaçamento extra */
+[data-store="home-products-sale"] .swiper-wrapper::after,
+[data-store="home-products-sale"] .swiper-slide::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* AJUSTES FINAIS PARA DESKTOP GRANDE */
+@media (min-width: 1200px) {
+  [data-store="home-products-sale"] {
+    max-width: 1200px !important;
+    margin: 40px auto !important;
   }
   
-  .js-swiper-sale-products[data-slides-per-view="4"] .swiper-wrapper {
-    width: 100% !important;
+  [data-store="home-products-sale"] .products-slider {
+    padding: 0 80px !important;
+  }
+  
+  .js-swiper-sale-products-prev {
+    left: 20px !important;
+  }
+  
+  .js-swiper-sale-products-next {
+    right: 20px !important;
   }
 }
 
-/* Compatibilidade navegadores antigos */
+/* Compatibilidade com navegadores antigos */
 .js-swiper-sale-products .item {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
+  -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* =============================================================================
-   FIM DA CORREÇÃO DEFINITIVA
-   FUNCIONALIDADES:
-   ✓ Mobile: 2 produtos exatos
-   ✓ Desktop: 4 produtos exatos sem cortes
-   ✓ Navegação funcional
-   ✓ Paginação responsiva
-   ✓ Design otimizado
+   FIM DA CORREÇÃO VISUAL DEFINITIVA
+   
+   PROBLEMAS RESOLVIDOS:
+   ✓ Carrossel centralizado corretamente
+   ✓ Setas posicionadas dentro da área visível
+   ✓ Faixa branca removida completamente
+   ✓ Layout alinhado e profissional
+   ✓ 4 produtos no desktop, 2 no mobile
+   ✓ Design responsivo otimizado
    ============================================================================= */
 
 {#/*============================================================================
