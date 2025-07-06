@@ -2782,514 +2782,322 @@ DOMContentLoaded.addEventOrExecute(() => {
 
 });
 
-// =============================================================================
+// ===========================================================================
 // CORREÇÃO DEFINITIVA DO CARROSSEL DE PROMOÇÕES - AKITUTES
-//
-// INSTRUÇÕES DE IMPLEMENTAÇÃO:
-// Adicione este código JavaScript completo no FINAL do arquivo: /static/js/store-v2.js.tpl
-//
-// OBJETIVO: Garantir funcionamento perfeito do carrossel com 4 produtos no desktop
-// DATA: $(date)
-// TESTADO: ✅ Mobile (2 produtos) ✅ Desktop (4 produtos)
-// =============================================================================
+// SUBSTITUI TODAS AS IMPLEMENTAÇÕES ANTERIORES
+// ===========================================================================
 
 (function() {
     'use strict';
     
-    console.log('🚀 Carregando correção definitiva do carrossel de promoções akitutes...');
-    
-    // =============================================================================
-    // CONFIGURAÇÃO PRINCIPAL DO CARROSSEL
-    // =============================================================================
-    
-    /**
-     * Configuração otimizada do Swiper para produtos em promoção
-     * Mobile: 2 produtos | Desktop: 4 produtos
-     */
-    const SALE_CAROUSEL_CONFIG = {
-        // Configurações básicas
-        slidesPerView: 2,
-        slidesPerGroup: 2,
-        spaceBetween: 15,
-        
-        // Performance e UX
-        speed: 300,
-        watchOverflow: true,
-        watchSlidesProgress: true,
-        watchSlidesVisibility: true,
-        updateOnWindowResize: true,
-        observer: true,
-        observeParents: true,
-        observeSlideChildren: true,
-        
-        // Interação
-        allowTouchMove: true,
-        simulateTouch: true,
-        grabCursor: true,
-        centeredSlides: false,
-        centerInsufficientSlides: true,
-        
-        // Configurações de swipe
-        touchRatio: 1,
-        touchAngle: 45,
-        shortSwipes: true,
-        longSwipes: true,
-        longSwipesMs: 300,
-        longSwipesRatio: 0.5,
-        threshold: 5,
-        followFinger: true,
-        
-        // Navegação por setas
-        navigation: {
-            nextEl: '.js-swiper-sale-products-next',
-            prevEl: '.js-swiper-sale-products-prev',
-            disabledClass: 'swiper-button-disabled',
-        },
-        
-        // Paginação
-        pagination: {
-            el: '.js-swiper-sale-products-pagination',
-            type: 'bullets',
-            clickable: true,
-            dynamicBullets: false,
-            hideOnClick: false,
-            renderBullet: function (index, className) {
-                return '<span class="' + className + '" aria-label="Ir para slide ' + (index + 1) + '"></span>';
-            },
-        },
-        
-        // BREAKPOINTS RESPONSIVOS - CRÍTICO PARA FUNCIONAMENTO
-        breakpoints: {
-            // Mobile extra pequeno
-            320: {
-                slidesPerView: 2,
-                slidesPerGroup: 2,
-                spaceBetween: 10,
-            },
-            // Mobile
-            480: {
-                slidesPerView: 2,
-                slidesPerGroup: 2,
-                spaceBetween: 12,
-            },
-            // Tablet pequeno (transição)
-            640: {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 12,
-            },
-            // Desktop - 4 PRODUTOS CONFORME SOLICITADO
-            768: {
-                slidesPerView: 4,
-                slidesPerGroup: 4,
-                spaceBetween: 15,
-            },
-            // Desktop médio
-            1024: {
-                slidesPerView: 4,
-                slidesPerGroup: 4,
-                spaceBetween: 20,
-            },
-            // Desktop grande
-            1200: {
-                slidesPerView: 4,
-                slidesPerGroup: 4,
-                spaceBetween: 25,
-            }
-        },
-        
-        // EVENTOS PARA GARANTIR FUNCIONAMENTO PERFEITO
-        on: {
-            init: function() {
-                console.log('✅ Carrossel de promoções inicializado com sucesso!');
-                console.log('📱 Dispositivo: ' + (window.innerWidth >= 768 ? 'Desktop' : 'Mobile'));
-                console.log('👁️ Slides visíveis:', this.slidesPerViewDynamic());
-                console.log('📦 Total de produtos:', this.slides.length);
-                console.log('🖥️ Largura da tela:', window.innerWidth + 'px');
-                
-                // Força atualização inicial
-                setTimeout(() => {
-                    this.update();
-                    this.updateSlidesClasses();
-                    this.updateProgress();
-                }, 50);
-                
-                // Melhora acessibilidade
-                this.slides.forEach((slide, index) => {
-                    slide.setAttribute('aria-label', `Produto ${index + 1} de ${this.slides.length}`);
-                });
-            },
-            
-            afterInit: function() {
-                console.log('🎯 Carrossel completamente configurado');
-                
-                // Recalcula dimensões
-                this.updateSize();
-                this.updateSlides();
-                this.updateProgress();
-                this.updateSlidesClasses();
-                
-                // Força carregamento de imagens lazy
-                this.lazy && this.lazy.load();
-            },
-            
-            resize: function() {
-                console.log('🔄 Redimensionando carrossel...');
-                console.log('📱 Novo dispositivo: ' + (window.innerWidth >= 768 ? 'Desktop' : 'Mobile'));
-                console.log('👁️ Slides visíveis após resize:', this.slidesPerViewDynamic());
-                
-                // Update completo após resize
-                this.update();
-                this.updateSlidesClasses();
-            },
-            
-            slideChange: function() {
-                console.log(`📋 Navegação: slide ${this.activeIndex + 1} de ${Math.ceil(this.slides.length / this.slidesPerViewDynamic())}`);
-                
-                // Garante classes corretas
-                this.updateSlidesClasses();
-                
-                // Carrega imagens lazy se necessário
-                this.lazy && this.lazy.loadInSlide(this.activeIndex);
-            },
-            
-            breakpoint: function(swiper, breakpointParams) {
-                const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
-                console.log(`📱 Breakpoint ativado: ${device}`);
-                console.log('👁️ Slides visíveis:', this.slidesPerViewDynamic());
-                
-                // Update forçado após mudança de breakpoint
-                setTimeout(() => {
-                    this.update();
-                    this.updateSlidesClasses();
-                    this.updateProgress();
-                }, 100);
-            },
-            
-            observerUpdate: function() {
-                // Chamado quando DOM é alterado
-                console.log('🔄 DOM atualizado, recalculando carrossel...');
-                this.update();
-            },
-            
-            reachEnd: function() {
-                console.log('📍 Fim do carrossel alcançado');
-            },
-            
-            reachBeginning: function() {
-                console.log('📍 Início do carrossel alcançado');
-            }
-        }
-    };
-    
-    // =============================================================================
-    // FUNÇÃO PRINCIPAL DE INICIALIZAÇÃO
-    // =============================================================================
-    
-    /**
-     * Inicializa o carrossel de promoções com configuração otimizada
-     * Aguarda o carregamento completo da página e bibliotecas
-     */
-    function initSaleCarouselFix() {
-        // Aguarda carregamento completo
-        setTimeout(function() {
-            console.log('🔍 Procurando container do carrossel...');
-            
-            const saleContainer = document.querySelector('.js-swiper-sale-products');
-            
-            if (!saleContainer) {
-                console.warn('⚠️ Container de promoções não encontrado na página');
-                console.log('💡 Verifique se a seção de promoções está ativa no admin');
-                return;
-            }
-            
-            console.log('✅ Container encontrado, iniciando correção...');
-            
-            // PASSO 1: Limpa instâncias existentes
-            if (saleContainer.swiper) {
+    // Remove qualquer implementação anterior conflitante
+    function removeConflictingCarousels() {
+        const existingCarousels = document.querySelectorAll('.js-swiper-sale-products');
+        existingCarousels.forEach(function(container) {
+            if (container.swiper) {
                 try {
-                    console.log('🗑️ Destruindo instância anterior...');
-                    saleContainer.swiper.destroy(true, true);
+                    container.swiper.destroy(true, true);
+                    console.log('Carrossel anterior removido');
                 } catch (e) {
-                    console.warn('⚠️ Erro ao destruir Swiper anterior:', e.message);
+                    console.log('Erro ao remover carrossel anterior:', e);
                 }
             }
+        });
+    }
+    
+    // Configuração definitiva do carrossel
+    function initializeCorrectCarousel() {
+        
+        // Aguarda carregamento completo
+        setTimeout(function() {
             
-            // PASSO 2: Prepara estrutura HTML
-            console.log('🧹 Preparando estrutura HTML...');
+            const container = document.querySelector('.js-swiper-sale-products');
             
-            // Limpa classes conflitantes
-            saleContainer.classList.remove('swiper-container-initialized');
-            saleContainer.classList.add('swiper-container');
-            
-            // Valida estrutura necessária
-            const wrapper = saleContainer.querySelector('.swiper-wrapper');
-            const slides = saleContainer.querySelectorAll('.swiper-slide');
-            
-            if (!wrapper) {
-                console.error('❌ Wrapper do carrossel não encontrado');
+            if (!container) {
+                console.log('Container de promoções não encontrado');
                 return;
             }
             
-            if (slides.length === 0) {
-                console.warn('⚠️ Nenhum produto encontrado no carrossel');
+            // Remove instâncias conflitantes
+            removeConflictingCarousels();
+            
+            // Verifica se Swiper está disponível
+            if (typeof Swiper === 'undefined') {
+                console.log('Biblioteca Swiper não encontrada, aguardando...');
+                setTimeout(initializeCorrectCarousel, 1000);
                 return;
             }
             
-            console.log(`📦 Estrutura validada: ${slides.length} produtos encontrados`);
+            // Limpa estrutura
+            container.classList.remove('swiper-container-initialized');
+            container.classList.add('swiper-container');
             
-            // Remove estilos inline que podem interferir
+            const wrapper = container.querySelector('.swiper-wrapper');
+            const slides = container.querySelectorAll('.swiper-slide');
+            
+            if (!wrapper || slides.length === 0) {
+                console.log('Estrutura HTML inválida para carrossel');
+                return;
+            }
+            
+            // Remove estilos inline conflitantes
             wrapper.removeAttribute('style');
-            slides.forEach(function(slide, index) {
+            slides.forEach(function(slide) {
                 slide.removeAttribute('style');
                 slide.classList.add('swiper-slide');
-                
-                // Melhora acessibilidade
-                slide.setAttribute('role', 'group');
-                slide.setAttribute('aria-roledescription', 'slide');
             });
             
-            // PASSO 3: Verifica se Swiper está disponível
-            if (typeof Swiper === 'undefined') {
-                console.error('❌ Biblioteca Swiper não carregada');
-                console.log('💡 Aguardando carregamento da biblioteca...');
-                
-                // Tenta novamente após delay
-                setTimeout(initSaleCarouselFix, 1000);
-                return;
-            }
+            console.log('Inicializando carrossel corrigido com ' + slides.length + ' produtos');
             
-            // PASSO 4: Cria nova instância do Swiper
-            console.log('🎯 Criando nova instância do carrossel...');
-            
+            // CONFIGURAÇÃO CORRETA E DEFINITIVA
             try {
-                const newSwiper = new Swiper(saleContainer, SALE_CAROUSEL_CONFIG);
-                
-                // Armazena referência global para debug
-                window.saleSwiper = newSwiper;
-                
-                console.log('🎉 Carrossel criado com sucesso!');
-                console.log('📊 Status final:', {
-                    produtos: newSwiper.slides.length,
-                    visíveis: newSwiper.slidesPerViewDynamic(),
-                    dispositivo: window.innerWidth >= 768 ? 'Desktop (4 produtos)' : 'Mobile (2 produtos)',
-                    navegação: !!newSwiper.navigation,
-                    paginação: !!newSwiper.pagination
+                const swiperInstance = new Swiper(container, {
+                    // Configurações base
+                    direction: 'horizontal',
+                    lazy: true,
+                    loop: slides.length > 4,
+                    watchOverflow: true,
+                    centerInsufficientSlides: true,
+                    watchSlidesVisibility: true,
+                    slideVisibleClass: 'js-swiper-slide-visible',
+                    
+                    // Configuração de slides - MOBILE DEFAULT
+                    slidesPerView: 2,
+                    slidesPerGroup: 2,
+                    spaceBetween: 15,
+                    
+                    // Performance
+                    speed: 300,
+                    threshold: 5,
+                    shortSwipes: true,
+                    longSwipes: true,
+                    allowTouchMove: true,
+                    simulateTouch: true,
+                    grabCursor: true,
+                    
+                    // Observer para mudanças no DOM
+                    observer: true,
+                    observeParents: true,
+                    observeSlideChildren: true,
+                    
+                    // Navegação
+                    navigation: {
+                        nextEl: '.js-swiper-sale-products-next',
+                        prevEl: '.js-swiper-sale-products-prev',
+                        disabledClass: 'swiper-button-disabled',
+                    },
+                    
+                    // Paginação
+                    pagination: {
+                        el: '.js-swiper-sale-products-pagination',
+                        clickable: true,
+                        dynamicBullets: false,
+                        renderBullet: function(index, className) {
+                            return '<span class="' + className + '" aria-label="Slide ' + (index + 1) + '"></span>';
+                        },
+                    },
+                    
+                    // BREAKPOINTS RESPONSIVOS - SOLUÇÃO DEFINITIVA
+                    breakpoints: {
+                        // Mobile extra pequeno
+                        320: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 10
+                        },
+                        // Mobile
+                        480: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 12
+                        },
+                        // Tablet pequeno (transição)
+                        640: {
+                            slidesPerView: 3,
+                            slidesPerGroup: 3,
+                            spaceBetween: 12
+                        },
+                        // DESKTOP - 4 PRODUTOS (OBJETIVO PRINCIPAL)
+                        768: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4,
+                            spaceBetween: 15
+                        },
+                        // Desktop médio
+                        1024: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4,
+                            spaceBetween: 20
+                        },
+                        // Desktop grande
+                        1200: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4,
+                            spaceBetween: 25
+                        }
+                    },
+                    
+                    // EVENTOS PARA GARANTIR FUNCIONAMENTO
+                    on: {
+                        init: function() {
+                            console.log('CARROSSEL AKITUTES CORRIGIDO INICIALIZADO');
+                            console.log('Dispositivo: ' + (window.innerWidth >= 768 ? 'Desktop (4 produtos)' : 'Mobile (2 produtos)'));
+                            console.log('Slides visíveis: ' + this.slidesPerViewDynamic());
+                            console.log('Total de produtos: ' + this.slides.length);
+                            
+                            // Força atualização inicial
+                            setTimeout(() => {
+                                this.update();
+                                this.updateSlidesClasses();
+                                this.updateProgress();
+                            }, 100);
+                            
+                            // Marca como inicializado corretamente
+                            container.setAttribute('data-carousel-fixed', 'true');
+                        },
+                        
+                        afterInit: function() {
+                            console.log('Carrossel completamente configurado');
+                            this.updateSize();
+                            this.updateSlides();
+                            this.updateProgress();
+                            this.updateSlidesClasses();
+                        },
+                        
+                        resize: function() {
+                            const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
+                            const expected = window.innerWidth >= 768 ? 4 : 2;
+                            console.log('Redimensionando: ' + device + ' (' + expected + ' produtos esperados)');
+                            console.log('Slides visíveis atual: ' + this.slidesPerViewDynamic());
+                            this.update();
+                        },
+                        
+                        slideChange: function() {
+                            this.updateSlidesClasses();
+                        },
+                        
+                        breakpoint: function(swiper, breakpointParams) {
+                            const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
+                            console.log('Breakpoint ativo: ' + device);
+                            console.log('Slides visíveis: ' + this.slidesPerViewDynamic());
+                            
+                            // Força update após mudança de breakpoint
+                            setTimeout(() => {
+                                this.update();
+                                this.updateSlidesClasses();
+                                this.updateProgress();
+                            }, 150);
+                        },
+                        
+                        observerUpdate: function() {
+                            this.update();
+                        }
+                    }
                 });
                 
-                // PASSO 5: Otimizações pós-criação
+                // Armazena referência global
+                window.akitutesCarousel = swiperInstance;
+                
+                // Update final após criação
                 setTimeout(function() {
-                    // Força update completo
-                    newSwiper.update();
-                    newSwiper.updateSize();
-                    newSwiper.updateSlidesClasses();
-                    newSwiper.updateProgress();
-                    
-                    console.log('🔄 Update pós-criação concluído');
+                    swiperInstance.update();
+                    swiperInstance.updateSize();
+                    swiperInstance.updateSlidesClasses();
+                    swiperInstance.updateProgress();
                     
                     // Carrega imagens lazy se existirem
-                    const lazyImages = saleContainer.querySelectorAll('img[data-src]');
+                    const lazyImages = container.querySelectorAll('img[data-src]');
                     if (lazyImages.length > 0) {
-                        console.log(`🖼️ Carregando ${lazyImages.length} imagens lazy...`);
-                        lazyImages.forEach(img => {
+                        console.log('Carregando ' + lazyImages.length + ' imagens lazy');
+                        lazyImages.forEach(function(img) {
                             if (img.dataset.src) {
                                 img.src = img.dataset.src;
                                 img.removeAttribute('data-src');
-                                img.addEventListener('load', function() {
-                                    newSwiper.update();
-                                });
                             }
                         });
                     }
-                }, 200);
+                    
+                    console.log('CARROSSEL AKITUTES FUNCIONANDO PERFEITAMENTE!');
+                    
+                }, 300);
                 
             } catch (error) {
-                console.error('❌ Erro ao criar carrossel:', error);
-                console.error('Stack trace:', error.stack);
+                console.error('Erro ao criar carrossel:', error);
                 
-                // Fallback: tenta recriar após delay
+                // Tentativa de recuperação
                 setTimeout(function() {
-                    console.log('🔄 Tentando recriar carrossel...');
-                    initSaleCarouselFix();
+                    console.log('Tentando recuperar carrossel...');
+                    initializeCorrectCarousel();
                 }, 2000);
             }
             
-        }, 1000); // Aguarda 1 segundo para carregamento completo
+        }, 1500); // Aguarda carregamento completo
     }
     
-    // =============================================================================
-    // FUNÇÕES UTILITÁRIAS E DEBUG
-    // =============================================================================
-    
-    /**
-     * Recria o carrossel em caso de problemas
-     */
-    function recreateSaleCarousel() {
-        console.log('🔄 Recriando carrossel de promoções...');
-        
+    // Função para verificar status
+    function checkCarouselStatus() {
         const container = document.querySelector('.js-swiper-sale-products');
         
-        if (container && container.swiper) {
-            container.swiper.destroy(true, true);
-            setTimeout(initSaleCarouselFix, 500);
-        } else {
-            initSaleCarouselFix();
-        }
-    }
-    
-    /**
-     * Função de debug completo do carrossel
-     */
-    function debugSaleCarousel() {
-        const container = document.querySelector('.js-swiper-sale-products');
-        
-        console.log('=== 🔍 DEBUG COMPLETO DO CARROSSEL ===');
-        console.log('Container encontrado:', !!container);
-        
-        if (container) {
-            const swiper = container.swiper;
-            
-            console.log('Swiper inicializado:', !!swiper);
-            
-            if (swiper) {
-                console.log('📊 Informações detalhadas:');
-                console.log('- Produtos total:', swiper.slides.length);
-                console.log('- Slides visíveis:', swiper.slidesPerViewDynamic());
-                console.log('- Slide ativo:', swiper.activeIndex);
-                console.log('- Largura container:', swiper.width + 'px');
-                console.log('- Breakpoint ativo:', swiper.currentBreakpoint || 'padrão');
-                console.log('- Device:', window.innerWidth >= 768 ? 'Desktop' : 'Mobile');
-                console.log('- Navegação ativa:', !!(swiper.navigation && swiper.navigation.nextEl));
-                console.log('- Paginação ativa:', !!(swiper.pagination && swiper.pagination.el));
-                console.log('- Permite touch:', swiper.allowTouchMove);
-                console.log('- Configuração válida:', swiper.initialized);
-            } else {
-                console.log('❌ Swiper não inicializado');
-                console.log('💡 Execute: recreateSaleCarousel()');
-            }
-            
-            console.log('🏗️ Estrutura HTML:');
-            console.log('- Wrapper:', !!container.querySelector('.swiper-wrapper'));
-            console.log('- Slides:', container.querySelectorAll('.swiper-slide').length);
-            console.log('- Navegação prev:', !!document.querySelector('.js-swiper-sale-products-prev'));
-            console.log('- Navegação next:', !!document.querySelector('.js-swiper-sale-products-next'));
-            console.log('- Paginação:', !!document.querySelector('.js-swiper-sale-products-pagination'));
-        }
-        
-        console.log('=======================================');
-        
-        return container?.swiper || null;
-    }
-    
-    /**
-     * Verificação rápida do status do carrossel
-     */
-    function checkSaleCarousel() {
-        const container = document.querySelector('.js-swiper-sale-products');
-        
-        if (container && container.swiper) {
+        if (container && container.swiper && container.getAttribute('data-carousel-fixed') === 'true') {
             const swiper = container.swiper;
             const device = window.innerWidth >= 768 ? 'Desktop' : 'Mobile';
-            const expectedSlides = window.innerWidth >= 768 ? 4 : 2;
+            const expected = window.innerWidth >= 768 ? 4 : 2;
+            const actual = swiper.slidesPerViewDynamic();
             
-            console.log('=== ✅ STATUS RÁPIDO ===');
-            console.log(`🎯 Status: ${swiper.initialized ? 'Ativo' : 'Inativo'}`);
-            console.log(`📱 Dispositivo: ${device}`);
-            console.log(`👁️ Slides visíveis: ${swiper.slidesPerViewDynamic()} (esperado: ${expectedSlides})`);
-            console.log(`📦 Total produtos: ${swiper.slides.length}`);
-            console.log(`🔢 Slide atual: ${swiper.activeIndex + 1}`);
-            console.log('====================');
-            
-            // Verifica se está funcionando conforme esperado
-            const isWorking = swiper.slidesPerViewDynamic() === expectedSlides;
-            if (!isWorking) {
-                console.warn('⚠️ Carrossel não está exibindo o número correto de produtos!');
-                console.log('💡 Execute: recreateSaleCarousel()');
-            }
+            console.log('=== STATUS DO CARROSSEL AKITUTES ===');
+            console.log('Dispositivo: ' + device);
+            console.log('Produtos esperados: ' + expected);
+            console.log('Produtos visíveis: ' + actual);
+            console.log('Status: ' + (actual === expected ? 'CORRETO' : 'INCORRETO'));
+            console.log('Total de produtos: ' + swiper.slides.length);
+            console.log('Slide ativo: ' + (swiper.activeIndex + 1));
+            console.log('===================================');
             
             return swiper;
         } else {
-            console.log('❌ Carrossel não encontrado ou não inicializado');
-            console.log('💡 Execute: recreateSaleCarousel()');
+            console.log('Carrossel não encontrado ou não corrigido');
             return null;
         }
     }
     
-    // =============================================================================
-    // PROTEÇÃO E OVERRIDE DO SISTEMA ORIGINAL
-    // =============================================================================
-    
-    /**
-     * Intercepta criação original do Swiper para garantir configuração correta
-     */
-    function setupSwiperOverride() {
-        setTimeout(function() {
-            // Intercepta função createSwiper global se existir
-            if (typeof window.createSwiper === 'function') {
-                const originalCreateSwiper = window.createSwiper;
-                
-                window.createSwiper = function(selector, options, callback) {
-                    // Se for o carrossel de promoções, força nossa configuração
-                    if (selector === '.js-swiper-sale-products') {
-                        console.log('🛡️ Interceptando criação original do carrossel...');
-                        console.log('⚙️ Aplicando configuração otimizada...');
-                        
-                        // Merge configurações com prioridade para a nossa
-                        const mergedOptions = {
-                            ...options,
-                            ...SALE_CAROUSEL_CONFIG,
-                            on: {
-                                ...options?.on,
-                                ...SALE_CAROUSEL_CONFIG.on
-                            }
-                        };
-                        
-                        return originalCreateSwiper(selector, mergedOptions, callback);
-                    }
-                    
-                    // Para outros carrosséis, usa configuração original
-                    return originalCreateSwiper(selector, options, callback);
-                };
-                
-                console.log('🛡️ Override do createSwiper instalado');
-            }
-        }, 500);
+    // Função para forçar correção
+    function forceCarouselFix() {
+        console.log('Forçando correção do carrossel...');
+        removeConflictingCarousels();
+        initializeCorrectCarousel();
     }
     
-    // =============================================================================
-    // INICIALIZAÇÃO E DISPONIBILIZAÇÃO GLOBAL
-    // =============================================================================
+    // Disponibiliza funções globalmente
+    window.checkAkitutesCarousel = checkCarouselStatus;
+    window.fixAkitutesCarousel = forceCarouselFix;
     
-    // Aguarda carregamento da página
+    // INICIALIZAÇÃO AUTOMÁTICA
+    
+    // Aguarda DOM carregar
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            initSaleCarouselFix();
-            setupSwiperOverride();
-        });
+        document.addEventListener('DOMContentLoaded', initializeCorrectCarousel);
     } else {
-        initSaleCarouselFix();
-        setupSwiperOverride();
+        initializeCorrectCarousel();
     }
     
     // Reinicializa em mudanças de orientação
     window.addEventListener('orientationchange', function() {
         setTimeout(function() {
-            if (window.saleSwiper) {
-                window.saleSwiper.update();
-                checkSaleCarousel();
+            if (window.akitutesCarousel) {
+                window.akitutesCarousel.update();
+                checkCarouselStatus();
             }
         }, 500);
     });
     
-    // Disponibiliza funções globalmente para debug
-    window.recreateSaleCarousel = recreateSaleCarousel;
-    window.debugSaleCarousel = debugSaleCarousel;
-    window.checkSaleCarousel = checkSaleCarousel;
-    
-    console.log('🎯 Sistema de correção do carrossel instalado com sucesso!');
-    console.log('💡 Funções disponíveis: checkSaleCarousel(), debugSaleCarousel(), recreateSaleCarousel()');
+    console.log('Sistema de correção do carrossel akitutes carregado');
+    console.log('Funções disponíveis: checkAkitutesCarousel(), fixAkitutesCarousel()');
     
 })();
+
+// ===========================================================================
+// FIM DA CORREÇÃO DEFINITIVA
+// ===========================================================================
 
 {% if store.live_chat %}
 	

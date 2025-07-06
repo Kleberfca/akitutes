@@ -2198,35 +2198,28 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   transition: all 0.3s ease;
 }
 
-{# /* =============================================================================
-   CORREÇÃO DEFINITIVA DO CARROSSEL DE PROMOÇÕES - AKITUTES
-   
-   INSTRUÇÕES DE IMPLEMENTAÇÃO:
-   1. Adicione este código CSS completo no FINAL do arquivo: /snipplets/css/critical-css.tpl
-   2. Salve o arquivo e force refresh da página (Ctrl+Shift+R)
-   
-   OBJETIVO: Garantir que o carrossel exiba 4 produtos no desktop e 2 no mobile
-   DATA: $(date)
-   ============================================================================= */ #}
+/* ===========================================================================
+   CORREÇÃO DEFINITIVA CSS - CARROSSEL AKITUTES
+   SUBSTITUI TODAS AS IMPLEMENTAÇÕES ANTERIORES
+   =========================================================================== */
 
-{# /* =============================================================================
-   SEÇÃO 1: RESET E FORÇA BASE DO CARROSSEL
-   ============================================================================= */ #}
-
-/* Container principal da seção de promoções */
+/* Reset completo da seção */
 [data-store="home-products-sale"] {
   margin: 40px 0 !important;
   padding: 0 15px !important;
   overflow: visible !important;
 }
 
-/* Anula comportamento de grid para carrossel */
-[data-store="home-products-sale"] .js-masonry-grid {
+/* Anula comportamento de grid masonry */
+[data-store="home-products-sale"] .js-masonry-grid,
+[data-store="home-products-sale"] .grid,
+[data-store="home-products-sale"] .product-grid {
   display: block !important;
   flex-wrap: nowrap !important;
   align-items: normal !important;
   column-count: auto !important;
   column-gap: 0 !important;
+  column-fill: auto !important;
 }
 
 /* Container principal do Swiper */
@@ -2236,25 +2229,16 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   position: relative !important;
   width: 100% !important;
   height: auto !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
   box-sizing: border-box !important;
 }
 
-{# /* =============================================================================
-   SEÇÃO 2: CONFIGURAÇÃO CRÍTICA DO SWIPER WRAPPER E SLIDES
-   ============================================================================= */ #}
-
-/* Wrapper dos slides - ESTRUTURA FUNDAMENTAL */
+/* Wrapper dos slides */
 .js-swiper-sale-products .swiper-wrapper {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   height: auto !important;
-  min-height: auto !important;
   align-items: normal !important;
-  align-content: normal !important;
-  justify-content: flex-start !important;
   transition-property: transform !important;
   transition-timing-function: ease !important;
   transition-duration: 300ms !important;
@@ -2264,101 +2248,68 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   box-sizing: border-box !important;
 }
 
-/* Slides individuais - CONFIGURAÇÃO CHAVE PARA FUNCIONAMENTO */
+/* Slides individuais */
 .js-swiper-sale-products .swiper-slide {
   display: block !important;
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   height: auto !important;
-  min-height: auto !important;
-  max-height: none !important;
   width: auto !important;
-  min-width: auto !important;
-  max-width: none !important;
   position: relative !important;
-  transform: none !important;
   box-sizing: border-box !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-{# /* =============================================================================
-   SEÇÃO 3: RESPONSIVIDADE - MOBILE E DESKTOP
-   ============================================================================= */ #}
+/* RESPONSIVIDADE CRÍTICA */
 
-/* MOBILE (até 767px) - 2 produtos por vez */
+/* Mobile (até 767px) - 2 produtos */
 @media (max-width: 767px) {
   .js-swiper-sale-products .swiper-slide {
     width: 50% !important;
     flex: 0 0 50% !important;
   }
-  
-  /* Espaçamento interno para mobile */
-  .js-swiper-sale-products .item-container {
-    padding: 8px !important;
-  }
 }
 
-/* DESKTOP (768px+) - 4 produtos por vez */
+/* Desktop (768px+) - 4 produtos */
 @media (min-width: 768px) {
   .js-swiper-sale-products .swiper-slide {
     width: 25% !important;
     flex: 0 0 25% !important;
   }
-  
-  /* Espaçamento interno para desktop */
-  .js-swiper-sale-products .item-container {
-    padding: 10px !important;
-  }
 }
 
-/* DESKTOP GRANDE (1200px+) - 4 produtos com mais espaço */
-@media (min-width: 1200px) {
-  .js-swiper-sale-products .item-container {
-    padding: 12px !important;
-  }
-}
-
-{# /* =============================================================================
-   SEÇÃO 4: ESTILIZAÇÃO DOS PRODUTOS
-   ============================================================================= */ #}
-
-/* Container dos produtos individuais */
+/* Container dos produtos */
 .js-swiper-sale-products .item-container,
 .js-swiper-sale-products .js-masonry-grid-item {
   display: block !important;
-  flex-direction: column !important;
   width: 100% !important;
-  max-width: 100% !important;
-  height: auto !important;
-  min-height: auto !important;
-  max-height: none !important;
+  padding: 10px !important;
   box-sizing: border-box !important;
   margin: 0 !important;
 }
 
-/* Cards dos produtos com design melhorado */
+/* Cards dos produtos */
 .js-swiper-sale-products .item {
   height: auto !important;
   min-height: 350px !important;
-  max-height: none !important;
   display: flex !important;
   flex-direction: column !important;
   border-radius: 15px !important;
-  box-shadow: 0 4px 8px 0 rgba(50, 50, 50, 0.15) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.3s ease !important;
   margin: 0 !important;
   overflow: hidden !important;
   background: #fff !important;
 }
 
-/* Efeito hover nos produtos */
+/* Hover nos produtos */
 .js-swiper-sale-products .item:hover {
   transform: translateY(-2px) !important;
-  box-shadow: 0 6px 16px 0 rgba(50, 50, 50, 0.25) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Container das imagens dos produtos */
+/* Imagens dos produtos */
 .js-swiper-sale-products .item-image-container {
   height: 200px !important;
   max-height: 200px !important;
@@ -2369,10 +2320,25 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   justify-content: center !important;
   border-top-left-radius: 15px !important;
   border-top-right-radius: 15px !important;
-  position: relative !important;
 }
 
-/* Ajustes para desktop */
+/* Ajustes para diferentes tamanhos de tela */
+@media (max-width: 480px) {
+  .js-swiper-sale-products .item-container {
+    padding: 8px !important;
+  }
+  
+  .js-swiper-sale-products .item {
+    min-height: 300px !important;
+  }
+  
+  .js-swiper-sale-products .item-image-container {
+    height: 180px !important;
+    max-height: 180px !important;
+    min-height: 180px !important;
+  }
+}
+
 @media (min-width: 768px) {
   .js-swiper-sale-products .item {
     min-height: 380px !important;
@@ -2385,24 +2351,13 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   }
 }
 
-/* Ajustes para mobile pequeno */
-@media (max-width: 480px) {
-  .js-swiper-sale-products .item {
-    min-height: 300px !important;
-  }
-  
-  .js-swiper-sale-products .item-image-container {
-    height: 180px !important;
-    max-height: 180px !important;
-    min-height: 180px !important;
+@media (min-width: 1200px) {
+  .js-swiper-sale-products .item-container {
+    padding: 12px !important;
   }
 }
 
-{# /* =============================================================================
-   SEÇÃO 5: NAVEGAÇÃO E CONTROLES
-   ============================================================================= */ #}
-
-/* Container da seção com espaço para setas */
+/* Container com espaço para setas */
 [data-store="home-products-sale"] .products-slider {
   position: relative !important;
   margin: 0 30px !important;
@@ -2425,7 +2380,6 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   justify-content: center !important;
   cursor: pointer !important;
   transition: all 0.3s ease !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 .js-swiper-sale-products-prev {
@@ -2436,14 +2390,13 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   right: -22px !important;
 }
 
-/* Hover das setas */
 .js-swiper-sale-products-prev:hover,
 .js-swiper-sale-products-next:hover {
   background: rgba(255, 255, 255, 1) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Esconde setas em mobile */
+/* Mobile: esconde setas */
 @media (max-width: 767px) {
   [data-store="home-products-sale"] .products-slider {
     margin: 0 !important;
@@ -2458,15 +2411,11 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
 /* Paginação */
 .js-swiper-sale-products-pagination {
   position: relative !important;
-  bottom: auto !important;
-  left: auto !important;
-  width: auto !important;
   margin-top: 20px !important;
   text-align: center !important;
   height: auto !important;
 }
 
-/* Bullets da paginação */
 .js-swiper-sale-products-pagination .swiper-pagination-bullet {
   width: 8px !important;
   height: 8px !important;
@@ -2483,23 +2432,16 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   transform: scale(1.2) !important;
 }
 
-{# /* =============================================================================
-   SEÇÃO 6: FORÇA OVERRIDE - MÁXIMA PRIORIDADE
-   ============================================================================= */ #}
-
-/* Remove TODAS as interferências de grid */
-[data-store="home-products-sale"] .grid,
-[data-store="home-products-sale"] .product-grid,
-[data-store="home-products-sale"] .masonry-grid {
+/* Remove todas as interferências */
+[data-store="home-products-sale"] .item-container,
+[data-store="home-products-sale"] .js-masonry-grid-item {
+  min-height: auto !important;
   display: block !important;
-  flex-wrap: nowrap !important;
-  align-items: normal !important;
-  column-count: auto !important;
-  column-gap: 0 !important;
-  column-fill: auto !important;
+  flex-direction: column !important;
+  break-inside: auto !important;
 }
 
-/* Força comportamento do Swiper */
+/* Força comportamento correto do Swiper */
 .js-swiper-sale-products.swiper-container,
 .js-swiper-sale-products.swiper-container-initialized {
   display: block !important;
@@ -2507,29 +2449,13 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   width: 100% !important;
 }
 
-/* Remove estilos inline que possam interferir */
-.js-swiper-sale-products .swiper-wrapper[style] {
-  transition-duration: 300ms !important;
-}
-
 /* Estados dos slides */
 .js-swiper-sale-products .swiper-slide-active,
-.js-swiper-sale-products .swiper-slide-visible,
-.js-swiper-sale-products .swiper-slide-next,
-.js-swiper-sale-products .swiper-slide-prev {
+.js-swiper-sale-products .swiper-slide-visible {
   opacity: 1 !important;
 }
 
-/* Remove lazy loading que pode interferir */
-.js-swiper-sale-products .swiper-lazy {
-  opacity: 1 !important;
-}
-
-{# /* =============================================================================
-   SEÇÃO 7: COMPATIBILIDADE E FALLBACKS
-   ============================================================================= */ #}
-
-/* Fallback para navegadores antigos */
+/* Compatibilidade */
 .js-swiper-sale-products .item {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -2538,23 +2464,9 @@ section[data-store="home-slider"] .js-home-main-slider-visibility {
   -o-transition: all 0.3s ease;
 }
 
-/* Garante funcionamento sem JavaScript */
-.no-js .js-swiper-sale-products .swiper-slide {
-  display: inline-block !important;
-  vertical-align: top !important;
-}
-
-@media (max-width: 767px) {
-  .no-js .js-swiper-sale-products .swiper-slide {
-    width: 50% !important;
-  }
-}
-
-@media (min-width: 768px) {
-  .no-js .js-swiper-sale-products .swiper-slide {
-    width: 25% !important;
-  }
-}
+/* ===========================================================================
+   FIM DA CORREÇÃO CSS DEFINITIVA
+   =========================================================================== */
 
 {#/*============================================================================
   #Utilities classes
