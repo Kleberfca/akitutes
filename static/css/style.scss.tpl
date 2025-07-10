@@ -2283,3 +2283,115 @@ style.scss.tpl
 .product-single-image{
   height: auto;
 }
+
+/* ==============================================
+   BANNER PRINCIPAL FULL WIDTH - DESKTOP
+   ============================================== */
+/* Banner principal - Full width forçado */
+@media screen and (min-width: 768px) {
+  
+  /* Container principal - Remove container padrão */
+  body .js-home-main-slider-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Slider específico - Força largura total */
+  body .home-slider,
+  body .js-home-slider {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Container Swiper - Remove limitações */
+  body .js-home-slider.swiper-container,
+  body .home-slider.swiper-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* Wrapper e slides */
+  body .js-home-slider .swiper-wrapper {
+    width: 100% !important;
+  }
+  
+  body .js-home-slider .swiper-slide {
+    width: 100% !important;
+  }
+  
+  /* Imagens ocupam 100% */
+  body .js-home-slider img,
+  body .home-slider img,
+  body .slide-img {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+  
+  /* Remove margens do container com classe m-bottom */
+  body .home-slider.m-bottom,
+  body .js-home-slider.m-bottom {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* Desktop médio - Força override */
+@media screen and (min-width: 992px) {
+  body .home-slider,
+  body .js-home-slider,
+  body .js-home-main-slider-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+/* Desktop grande - Remove limite de 1170px */
+@media screen and (min-width: 1200px) {
+  body .container .home-slider,
+  body .home-slider {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+/* Desktop extra grande - Override específico do Trend */
+@media screen and (min-width: 1368px) {
+  body .home-slider,
+  body .js-home-slider {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+/* Remove possíveis containers limitadores */
+@media screen and (min-width: 768px) {
+  body .js-home-sections-container .js-home-main-slider-container,
+  body #home-slider .js-home-main-slider-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Garante que o container pai não limite */
+@media screen and (min-width: 768px) {
+  body [data-store="home-slider"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
