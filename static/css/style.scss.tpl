@@ -2284,9 +2284,9 @@ style.scss.tpl
   height: auto;
 }
 
-/* ==============================================
-   BANNER PRINCIPAL FULL WIDTH - DESKTOP
-   ============================================== */
+/* ======================================================
+   INICIO AJUSTE BANNER PRINCIPAL FULL WIDTH - DESKTOP
+   ====================================================== */
 /* Banner principal - Full width forçado */
 @media screen and (min-width: 768px) {
   
@@ -2394,4 +2394,69 @@ style.scss.tpl
     margin: 0 !important;
     padding: 0 !important;
   }
+}
+
+/* ======================================================
+   FINAL DO AJUSTE BANNER PRINCIPAL FULL WIDTH - DESKTOP
+   ====================================================== */
+
+/* ==============================================
+   MELHORIAS OPCIONAIS - BANNER FULL WIDTH
+   Adicione após o código principal se desejar
+   ============================================== */
+
+/* 2. Transição suave entre slides */
+body .home-slider .swiper-slide {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* 3. Melhora controles de navegação */
+@media screen and (min-width: 768px) {
+  body .js-home-slider .swiper-button-prev {
+    left: 30px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+  
+  body .js-home-slider .swiper-button-next {
+    right: 30px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+  
+  /* Hover nos controles */
+  body .js-home-slider .swiper-button-prev:hover,
+  body .js-home-slider .swiper-button-next:hover {
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+  }
+}
+
+/* 4. Altura máxima para evitar banners muito altos */
+@media screen and (min-width: 768px) {
+  body .home-slider .swiper-slide img {
+    max-height: 600px;
+    object-fit: cover;
+  }
+}
+
+/* 5. Loading placeholder enquanto carrega imagem */
+body .home-slider .swiper-slide {
+  background: #f5f5f5;
+  background-image: linear-gradient(90deg, #f5f5f5 25%, #e5e5e5 50%, #f5f5f5 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Remove animation quando imagem carrega */
+body .home-slider .swiper-slide img {
+  animation: none;
+  background: none;
 }
