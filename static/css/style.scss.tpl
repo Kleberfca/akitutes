@@ -2460,3 +2460,148 @@ body .home-slider .swiper-slide img {
   animation: none;
   background: none;
 }
+/* ======================================================
+   FINAL DO MELHORIAS AJUSTE BANNER PRINCIPAL FULL WIDTH - DESKTOP
+   ====================================================== */
+
+/* ==============================================
+   CORREÇÕES DE COMPATIBILIDADE - TEMA TREND
+   Bordas Arredondadas com Alta Especificidade
+   ============================================== */
+
+/* Reset de elementos que podem interferir */
+body .js-item-product .item-info:before,
+body .js-masonry-grid-item .item-info:before {
+  display: none !important;
+  border: none !important;
+  content: none !important;
+}
+
+/* Força border-radius com alta especificidade */
+body .js-item-product.item-container .item,
+body .js-masonry-grid-item .item,
+body .swiper-slide .item,
+body .grid .item,
+body .products-slider-item .item {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Container principal com especificidade máxima */
+body .container .item,
+body .js-product-table .item,
+body .js-product-container .item {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Imagens e containers */
+body .item .item-image-container {
+  border-radius: 16px 16px 0 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+body .item .item-image-container img,
+body .item .item-image,
+body .item .item-image-featured,
+body .item .item-image-secondary {
+  border-radius: 16px 16px 0 0 !important;
+  object-fit: cover !important;
+}
+
+/* Container de informações */
+body .item .item-info-container {
+  border-radius: 0 0 16px 16px !important;
+  position: relative !important;
+  background-color: inherit !important;
+}
+
+/* Remove sombra padrão e aplica nova no hover */
+body .item {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+body .item:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  z-index: 10 !important;
+}
+
+/* Produtos em sliders */
+body .swiper-container .swiper-slide .item {
+  border-radius: 16px !important;
+  margin: 5px !important;
+}
+
+/* Quickshop */
+body .js-quickshop-container .item-image-container {
+  border-radius: 16px !important;
+}
+
+/* Produtos relacionados */
+body .js-related-products .item,
+body .related-products .item {
+  border-radius: 16px !important;
+}
+
+/* Página de produto */
+body #single-product .product-slider-container,
+body #single-product .product-slide,
+body #single-product .cloud-zoom {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Carrinho */
+body .ajax-cart-item .cart-item-image,
+body .cart-item .card-img-square-container,
+body .cart-item-image {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  body .item,
+  body .js-item-product .item,
+  body .item .item-image-container,
+  body .item .item-info-container {
+    border-radius: 12px !important;
+  }
+  
+  body .item .item-image-container,
+  body .item .item-image-container img {
+    border-radius: 12px 12px 0 0 !important;
+  }
+  
+  body .item .item-info-container {
+    border-radius: 0 0 12px 12px !important;
+  }
+  
+  body .item:hover {
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* Correção para labels e badges */
+body .item .labels-floating {
+  border-radius: 16px 0 0 0 !important;
+  overflow: visible !important;
+}
+
+body .item .label {
+  border-radius: 0 !important;
+}
+
+/* Garantir que nada ultrapasse as bordas */
+body .item * {
+  max-width: 100% !important;
+}
+/* ==============================================
+  FINAL CORREÇÕES DE COMPATIBILIDADE - TEMA TREND
+   Bordas Arredondadas com Alta Especificidade
+   ============================================== */
