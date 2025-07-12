@@ -2605,3 +2605,195 @@ body .item * {
   FINAL CORREÇÕES DE COMPATIBILIDADE - TEMA TREND
    Bordas Arredondadas com Alta Especificidade
    ============================================== */
+
+/* ==============================================
+   UNIFORMIZAÇÃO COM ALTA ESPECIFICIDADE
+   Sobrescreve qualquer estilo conflitante
+   ============================================== */
+
+/* Desabilitar Masonry e forçar Flexbox */
+body .container .js-masonry-grid,
+body .container .product-grid .row,
+body #grid .js-masonry-grid {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+  -ms-flex-direction: row !important;
+  flex-direction: row !important;
+  -ms-flex-wrap: wrap !important;
+  flex-wrap: wrap !important;
+  -webkit-box-align: stretch !important;
+  -ms-flex-align: stretch !important;
+  align-items: stretch !important;
+  position: relative !important;
+  height: auto !important;
+}
+
+/* Container do item */
+body .js-masonry-grid .item-container,
+body .product-grid .item-container,
+body .js-masonry-grid-item {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  float: none !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  margin-bottom: 20px !important;
+}
+
+/* Cartão principal */
+body .item-container .item {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  -ms-flex-direction: column !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+/* Container da imagem com aspect ratio */
+body .item .item-image-container {
+  position: relative !important;
+  width: 100% !important;
+  padding-bottom: 100% !important;
+  overflow: hidden !important;
+  -ms-flex-negative: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Imagens absolutas */
+body .item .item-image,
+body .item .item-image-featured,
+body .item .item-image-secondary,
+body .item .item-image-container img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  -o-object-fit: cover !important;
+  object-fit: cover !important;
+  -o-object-position: center !important;
+  object-position: center !important;
+}
+
+/* Container de informações flexível */
+body .item .item-info-container {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  -ms-flex-direction: column !important;
+  flex-direction: column !important;
+  -webkit-box-flex: 1 !important;
+  -ms-flex-positive: 1 !important;
+  flex-grow: 1 !important;
+  height: 100% !important;
+}
+
+/* Informações internas */
+body .item .item-info {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  -ms-flex-direction: column !important;
+  flex-direction: column !important;
+  -webkit-box-flex: 1 !important;
+  -ms-flex-positive: 1 !important;
+  flex-grow: 1 !important;
+  padding: 15px !important;
+  text-align: center !important;
+}
+
+/* Nome do produto com limite de linhas */
+body .item .item-name {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  line-height: 24px !important;
+  margin: 0 0 10px 0 !important;
+  -webkit-box-flex: 0 !important;
+  -ms-flex-positive: 0 !important;
+  flex-grow: 0 !important;
+}
+
+/* Container de preços sempre no final */
+body .item .item-price-container {
+  margin-top: auto !important;
+  padding-top: 10px !important;
+  -webkit-box-flex: 0 !important;
+  -ms-flex-positive: 0 !important;
+  flex-grow: 0 !important;
+}
+
+/* Remove decoração triangular */
+body .item .item-info:before,
+body .item .item-info:after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+}
+
+/* Garantir largura das colunas */
+@media (min-width: 1200px) {
+  body .item-container {
+    width: 25% !important;
+    -webkit-box-flex: 0 !important;
+    -ms-flex: 0 0 25% !important;
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  body .item-container {
+    width: 33.333% !important;
+    -webkit-box-flex: 0 !important;
+    -ms-flex: 0 0 33.333% !important;
+    flex: 0 0 33.333% !important;
+    max-width: 33.333% !important;
+  }
+}
+
+@media (max-width: 767px) {
+  body .item-container {
+    width: 50% !important;
+    -webkit-box-flex: 0 !important;
+    -ms-flex: 0 0 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+/* Produtos em sliders */
+body .products-slider .swiper-slide .item,
+body .swiper-container .item-container-slide .item {
+  height: 100% !important;
+}
+
+/* Correção para infinite scroll */
+body .js-product-table .item-container {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+/* ==============================================
+   IMPORTANTE: Este CSS tem especificidade máxima
+   para garantir que funcione em qualquer cenário
+   ============================================== */
