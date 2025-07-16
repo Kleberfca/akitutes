@@ -2163,31 +2163,106 @@ LS.ready.then(function() {
             $('img[src*="www.afip.gob.ar"]').attr('alt', '{{ "Logo de AFIP" | translate }}');
         {% endif %}
 
+        {#/*============================================================================
+          INICIO AJUSTE CARTÃO DE PRODUTOS
+        ==============================================================================*/ #}
+        // Função para equalizar alturas mantendo Masonry
+        var equalizeProductHeights = function() {
+            
+            // Aguarda o Masonry carregar completamente
+            if (!window.$masonry_grid) {
+                console.log('Aguardando Masonry carregar...');
+                setTimeout(equalizeProductHeights, 500);
+                return;
+            }
+            
+            console.log('Iniciando equalização de alturas...');
+            
+            // Seleciona todos os grids Masonry
+            $('.js-masonry-grid').each(function() {
+                var $grid = $(this);
+                var $items = $grid.find('.item');
+                
+                if ($items.length === 0) return;
+                
+                // Determina número de colunas baseado na largura
+                var gridWidth = $grid.width();
+                var itemWidth = $items.first().parent().outerWidth(true);
+                var columns = Math.round(gridWidth / itemWidth);
+                
+                console.log('Grid: ' + gridWidth + 'px | Colunas: ' + columns);
+                
+                // Processa itens por linha
+                for (var i = 0; i < $items.length; i += columns) {
+                    var $rowItems = $items.slice(i, i + columns);
+                    var maxInfoHeight = 0;
+                    
+                    // Calcula altura máxima da linha
+                    $rowItems.each(function() {
+                        var $infoContainer = $(this).find('.item-info-container');
+                        var infoHeight = $infoContainer.outerHeight();
+                        maxInfoHeight = Math.max(maxInfoHeight, infoHeight);
+                    });
+                    
+                    // Aplica altura uniforme na linha
+                    $rowItems.each(function() {
+                        var $infoContainer = $(this).find('.item-info-container');
+                        $infoContainer.css('min-height', maxInfoHeight + 'px');
+                    });
+                }
+                
+                // Atualiza layout do Masonry
+                if (window.$masonry_grid) {
+                    window.$masonry_grid.layout();
+                }
+            });
+            
+            console.log('Equalização concluída!');
+        };
+
+        // Executa após imagens carregarem
+        $(window).on('load', function() {
+            // Aguarda um pouco para garantir que tudo carregou
+            setTimeout(function() {
+                equalizeProductHeights();
+            }, 1000);
+        });
+
+        // Reexecuta ao redimensionar
+        var resizeTimer;
+        $(window).on('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                // Reset alturas antes de recalcular
+                $('.item-info-container').css('min-height', '');
+                equalizeProductHeights();
+            }, 250);
+        });
+
+        // Para infinite scroll - reexecuta após carregar mais produtos
+        $(document).on('ajaxComplete', function(event, xhr, settings) {
+            if (settings.url && settings.url.indexOf('products') > -1) {
+                setTimeout(function() {
+                    equalizeProductHeights();
+                }, 1000);
+            }
+        });
+
+        // Alternativa mais específica para infinite scroll
+        if (typeof LS !== 'undefined' && LS.infiniteScroll) {
+            var originalAfterLoaded = LS.infiniteScroll.afterLoaded;
+            LS.infiniteScroll.afterLoaded = function() {
+                if (originalAfterLoaded) originalAfterLoaded.apply(this, arguments);
+                setTimeout(equalizeProductHeights, 500);
+            };
+        }
+        {#/*============================================================================
+          FIM AJUSTE CARTÃO DE PRODUTOS
+        ==============================================================================*/ #}
+
     });
 });
 
-// Banner Full Width Desktop
-if (window.innerWidth >= 768) {
-    var sliderContainer = jQueryNuvem('.js-home-main-slider-container');
-    var homeSlider = jQueryNuvem('.home-slider');
-    
-    if (sliderContainer.length) {
-        sliderContainer.css({
-            'width': '100%',
-            'max-width': '100%',
-            'margin': '0',
-            'padding': '0'
-        });
-    }
-    
-    if (homeSlider.length) {
-        homeSlider.css({
-            'max-width': '100%',
-            'width': '100%',
-            'margin': '0'
-        });
-    }
-}
 
 {% if store.live_chat %}
 	

@@ -2605,3 +2605,39 @@ body .item * {
   FINAL CORREÇÕES DE COMPATIBILIDADE - TEMA TREND
    Bordas Arredondadas com Alta Especificidade
    ============================================== */
+
+/* ==============================================
+   CSS ULTRA SEGURO - MÍNIMAS ALTERAÇÕES
+   Não quebra layout, apenas melhora
+   ============================================== */
+
+/* 1. Altura mínima para cartões */
+.item {
+  min-height: 380px;
+}
+
+/* 2. Nome do produto com altura fixa */
+.item-name {
+  height: 40px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 3. Container de preço com altura mínima */
+.item-price-container {
+  min-height: 50px;
+}
+
+/* 4. Mobile - ajustes proporcionais */
+@media (max-width: 767px) {
+  .item {
+    min-height: 340px;
+  }
+  
+  .item-name {
+    height: 36px;
+    font-size: 12px;
+  }
+}
